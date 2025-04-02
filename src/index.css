@@ -69,8 +69,10 @@
     @apply text-3xl md:text-4xl font-serif font-medium text-cugini-dark mb-6 relative;
   }
 
+  /* Fix: Don't use @apply with the group utility */
   .product-card {
-    @apply group relative overflow-hidden;
+    position: relative;
+    overflow: hidden;
   }
   
   .product-image-container {
@@ -78,7 +80,12 @@
   }
   
   .product-image {
-    @apply transition-all duration-500 group-hover:scale-105;
+    @apply transition-all duration-500;
+  }
+  
+  /* Use the group-hover separately */
+  .group:hover .product-image {
+    @apply scale-105;
   }
   
   .product-info {

@@ -13,7 +13,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ id, name, price, image, category }: ProductCardProps) => {
   return (
-    <div className="product-card">
+    <div className="product-card group">
       <Link to={`/product/${id}`} className="block">
         <div className="product-image-container">
           <img 
