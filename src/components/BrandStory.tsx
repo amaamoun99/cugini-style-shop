@@ -9,7 +9,7 @@ const BrandStory = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div>
             <img 
-              src="../../images/DSC00427.jpg" 
+              src="/images/DSC00427.jpg" 
               alt="Cugini craftsmanship" 
               className="w-full h-[700px] object-cover"
             />

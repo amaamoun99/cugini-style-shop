@@ -13,7 +13,7 @@ const DiscoverCollection = () => {
                     loop
                     playsInline
                 >
-                    <source src="../../public/videos/VIDEO-2025-04-03-02-06-18.mp4" type="video/mp4" />
+                    <source src="/videos/VIDEO-2025-04-03-02-06-18.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>

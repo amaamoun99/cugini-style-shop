@@ -8,8 +8,8 @@ const collections = [
   {
     id: 1,
     title: 'Men',
-    video: "../../public/videos/man walking.mp4",
-    image: "../../public/images/DSC00414.jpg",
+    video: "/videos/man walking.mp4",
+    image: "/images/DSC00414.jpg",
     link: '/collections/men'
   },
   {

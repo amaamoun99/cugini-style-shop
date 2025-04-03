@@ -9,8 +9,8 @@ const products = [
     id: 5,
     name: 'Striped Linen Shirt',
     price: 149.99,
-    image: '../../public/images/DSC00399.jpg',
-    hoverImage: '../../public/images/DSC00400.jpg',
+    image: '/images/DSC00399.jpg',
+    hoverImage: '/images/DSC00400.jpg',
     category: 'Men'
   },
   {
