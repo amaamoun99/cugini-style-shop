@@ -87,6 +87,14 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" }
         },
+        "grow-width": {
+          "0%": { width: "0" },
+          "100%": { width: "100%" }
+        },
+        "grow-border": {
+          "0%": { transform: "scale(0.9)" },
+          "100%": { transform: "scale(1.1)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
