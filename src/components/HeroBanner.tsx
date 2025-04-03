@@ -13,7 +13,7 @@ const HeroBanner = () => {
           loop
           playsInline
         >
-          <source src="https://cdn.pixabay.com/vimeo/626989533/fashion-112134.mp4?width=1280&hash=c747e3796d140bab7a5d253ebf803a66d6c01403" type="video/mp4" />
+          <source src="../../public/videos/VIDEO-2025-04-03-02-05-06.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>

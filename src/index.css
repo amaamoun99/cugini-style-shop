@@ -129,7 +129,7 @@
 
   .bestsellers-section {
     @apply relative py-20;
-    background-image: url('https://images.unsplash.com/photo-1523359228466-a955d81a77f4?q=80&w=2070&auto=format&fit=crop');
+    background-image: url('https://images.unsplash.com/photo-1654166723373-e797452e2bdb?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

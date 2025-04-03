@@ -9,32 +9,32 @@ const products = [
     id: 5,
     name: 'Striped Linen Shirt',
     price: 149.99,
-    image: 'https://images.unsplash.com/photo-1602810318660-d2c46b750f88?q=80&w=1974&auto=format&fit=crop',
-    hoverImage: 'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=1974&auto=format&fit=crop',
+    image: '../../public/images/DSC00399.jpg',
+    hoverImage: '../../public/images/DSC00400.jpg',
     category: 'Men'
   },
   {
     id: 6,
     name: 'Silk Blouse',
     price: 169.99,
-    image: 'https://images.unsplash.com/photo-1608234808654-2a8875faa7fd?q=80&w=1974&auto=format&fit=crop',
-    hoverImage: 'https://images.unsplash.com/photo-1617551307578-7232f8f61993?q=80&w=1974&auto=format&fit=crop',
+    image: '../../public/images/IMG-20250403-WA0009.jpg',
+    hoverImage: '../../public/images/IMG-20250403-WA0010.jpg',
     category: 'Women'
   },
   {
     id: 7,
     name: 'Cotton Chino Pants',
     price: 129.99,
-    image: 'https://images.unsplash.com/photo-1604176424472-9d0d52985b20?q=80&w=1965&auto=format&fit=crop',
-    hoverImage: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?q=80&w=1974&auto=format&fit=crop',
+    image: '../../public/images/IMG-20250403-WA0012.jpg',
+    hoverImage: '../../public/images/IMG-20250403-WA0016.jpg',
     category: 'Men'
   },
   {
     id: 8,
     name: 'Leather Handbag',
     price: 219.99,
-    image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=2076&auto=format&fit=crop',
-    hoverImage: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=1935&auto=format&fit=crop',
+    image: '../../public/images/IMG-20250403-WA0013.jpg',
+    hoverImage: '../../public/images/IMG-20250403-WA0014.jpg',
     category: 'Women'
   }
 ];

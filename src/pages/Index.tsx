@@ -9,6 +9,7 @@ import BrandStory from '@/components/BrandStory';
 import InstagramFeed from '@/components/InstagramFeed';
 import NewArrivals from '@/components/NewArrivals';
 import Newsletter from '@/components/Newsletter';
+import DiscoverCollection from '@/components/DiscoverCollection';
 
 const Index = () => {
   return (
@@ -19,9 +20,10 @@ const Index = () => {
         <FeaturedCollections />
         <BestSellers />
         <BrandStory />
+        <DiscoverCollection />
         <NewArrivals />
         <InstagramFeed />
-        <Newsletter />
+        {/* <Newsletter /> */}
       </main>
       <Footer />
     </div>

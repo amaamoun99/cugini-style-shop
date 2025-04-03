@@ -9,22 +9,19 @@ const BrandStory = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div>
             <img 
-              src="https://images.unsplash.com/photo-1556717711-450e3664d412?q=80&w=1980&auto=format&fit=crop" 
+              src="../../public/images/DSC00427.jpg" 
               alt="Cugini craftsmanship" 
-              className="w-full h-[500px] object-cover"
+              className="w-full h-[700px] object-cover"
             />
           </div>
           <div className="md:pl-8">
             <h2 className="section-title">Our Story</h2>
             <p className="text-cugini-dark mb-6">
-              Founded in the heart of Milan, Cugini brings together the traditional craftsmanship 
-              of Italian tailoring with vintage-inspired designs. Our pieces are created with 
-              a dedication to quality materials, timeless silhouettes, and the subtle details 
-              that elevate everyday fashion.
+            CUGINI, meaning “cousins” in Italian, is more than a brand it’s a legacy. Inspired by our grandfather, a master tailor for over 65 years, we set out to revive the art of timeless Italian craftsmanship.
+
             </p>
             <p className="text-cugini-dark mb-8">
-              Each Cugini garment tells a story of heritage, passion, and the art of slow fashion, 
-              offering you pieces that transcend trends and become cherished parts of your wardrobe for years to come.
+            In the 1950s, he built a tailoring house where every stitch was made with precision and love. Though no one in our family continued his craft, we refused to let it fade. CUGINI brings his passion back to life, crafting high-quality, tailored pants designed for those who appreciate effortless elegance.
             </p>
             <Link to="/about" className="btn-primary">Discover Our Heritage</Link>
           </div>
