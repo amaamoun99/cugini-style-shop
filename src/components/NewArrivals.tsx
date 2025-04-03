@@ -17,24 +17,24 @@ const products = [
     id: 6,
     name: 'Silk Blouse',
     price: 169.99,
-    image: '../../public/images/IMG-20250403-WA0009.jpg',
-    hoverImage: '../../public/images/IMG-20250403-WA0010.jpg',
+    image: '/images/IMG-20250403-WA0009.jpg',
+    hoverImage: '/images/IMG-20250403-WA0010.jpg',
     category: 'Women'
   },
   {
     id: 7,
     name: 'Cotton Chino Pants',
     price: 129.99,
-    image: '../../public/images/IMG-20250403-WA0012.jpg',
-    hoverImage: '../../public/images/IMG-20250403-WA0016.jpg',
+    image: '/images/IMG-20250403-WA0012.jpg',
+    hoverImage: '/images/IMG-20250403-WA0016.jpg',
     category: 'Men'
   },
   {
     id: 8,
     name: 'Leather Handbag',
     price: 219.99,
-    image: '../../public/images/IMG-20250403-WA0013.jpg',
-    hoverImage: '../../public/images/IMG-20250403-WA0014.jpg',
+    image: '/images/IMG-20250403-WA0013.jpg',
+    hoverImage: '/images/IMG-20250403-WA0014.jpg',
     category: 'Women'
   }
 ];

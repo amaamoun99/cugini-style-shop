@@ -15,8 +15,8 @@ const collections = [
   {
     id: 2,
     title: 'Women',
-    video: "../../public/videos/CUGINI(SHRK)xG (1).mp4",
-    image: "../../public/images/IMG-20250403-WA0009.jpg",
+    video: "/videos/CUGINI(SHRK)xG (1).mp4",
+    image: "/images/IMG-20250403-WA0009.jpg",
     link: '/collections/women'
   }
 ];
