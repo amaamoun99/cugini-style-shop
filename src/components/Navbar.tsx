@@ -44,7 +44,6 @@ const Navbar = () => {
             <Link to="/" className="nav-link">Home</Link>
             <Link to="/men" className="nav-link">Men</Link>
             <Link to="/women" className="nav-link">Women</Link>
-            <Link to="/accessories" className="nav-link">Accessories</Link>
             <Link to="/sale" className="nav-link">Sale</Link>
             <Link to="/new-arrivals" className="nav-link">New Arrivals</Link>
           </nav>
@@ -121,7 +120,6 @@ const Navbar = () => {
             <Link to="/" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Home</Link>
             <Link to="/men" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Men</Link>
             <Link to="/women" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Women</Link>
-            <Link to="/accessories" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Accessories</Link>
             <Link to="/sale" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Sale</Link>
             <Link to="/new-arrivals" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>New Arrivals</Link>
           </nav>

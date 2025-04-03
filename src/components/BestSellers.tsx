@@ -28,25 +28,25 @@ const products = [
     category: 'Men'
   },
   {
-    id: 4,
-    name: 'Cashmere Scarf',
-    price: 99.99,
-    image: 'https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?q=80&w=1974&auto=format&fit=crop',
-    category: 'Accessories'
-  },
-  {
     id: 5,
     name: 'Italian Silk Tie',
     price: 129.99,
     image: 'https://images.unsplash.com/photo-1598532213298-8540061fea51?q=80&w=1976&auto=format&fit=crop',
-    category: 'Accessories'
+    category: 'Men'
   },
   {
-    id: 6,
-    name: 'Vintage Leather Bag',
+    id: 7,
+    name: 'Wool Sweater',
+    price: 179.99,
+    image: 'https://images.unsplash.com/photo-1434510423563-c7e99bbc5dfd?q=80&w=1974&auto=format&fit=crop',
+    category: 'Women'
+  },
+  {
+    id: 8,
+    name: 'Designer Dress',
     price: 349.99,
-    image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=1976&auto=format&fit=crop',
-    category: 'Accessories'
+    image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=1973&auto=format&fit=crop',
+    category: 'Women'
   }
 ];
 
