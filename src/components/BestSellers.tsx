@@ -16,7 +16,7 @@ const products = [
     id: 2,
     name: ' SFORZA Beige pinstriped pants',
     price: 189.99,
-    image: '/images/IMG-20250403-WA0013.jpg',
+    image: '../../public/images/IMG-20250403-WA0013.jpg',
     category: 'Women'
   },
   {

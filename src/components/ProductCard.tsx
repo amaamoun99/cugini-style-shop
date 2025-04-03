@@ -24,6 +24,7 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
           <img 
             src={image} 
             alt={name} 
+            loading="lazy"
             className="product-image w-full h-[400px] object-cover transition-opacity duration-700 ease-in-out"
           />
           
