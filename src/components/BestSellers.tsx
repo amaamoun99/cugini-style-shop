@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import ProductCard from './ProductCard';
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import useEmblaCarousel from 'embla-carousel-react';
@@ -11,6 +11,7 @@ const products = [
     name: 'Tailored Wool Blazer',
     price: 299.99,
     image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=1760&auto=format&fit=crop',
+    hoverImage: 'https://images.unsplash.com/photo-1578932750294-f5075e85f44a?q=80&w=1974&auto=format&fit=crop',
     category: 'Men'
   },
   {
@@ -18,6 +19,7 @@ const products = [
     name: 'Linen Sundress',
     price: 189.99,
     image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=1976&auto=format&fit=crop',
+    hoverImage: 'https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?q=80&w=1974&auto=format&fit=crop',
     category: 'Women'
   },
   {
@@ -25,6 +27,7 @@ const products = [
     name: 'Leather Oxford Shoes',
     price: 249.99,
     image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?q=80&w=1972&auto=format&fit=crop',
+    hoverImage: 'https://images.unsplash.com/photo-1605812860427-4024433a70fd?q=80&w=1974&auto=format&fit=crop',
     category: 'Men'
   },
   {
@@ -32,6 +35,7 @@ const products = [
     name: 'Italian Silk Tie',
     price: 129.99,
     image: 'https://images.unsplash.com/photo-1598532213298-8540061fea51?q=80&w=1976&auto=format&fit=crop',
+    hoverImage: 'https://images.unsplash.com/photo-1591741535018-d592fe0bf28b?q=80&w=1974&auto=format&fit=crop',
     category: 'Men'
   },
   {
@@ -39,6 +43,7 @@ const products = [
     name: 'Wool Sweater',
     price: 179.99,
     image: 'https://images.unsplash.com/photo-1434510423563-c7e99bbc5dfd?q=80&w=1974&auto=format&fit=crop',
+    hoverImage: 'https://images.unsplash.com/photo-1580331452209-c484408cf663?q=80&w=1974&auto=format&fit=crop',
     category: 'Women'
   },
   {
@@ -46,6 +51,7 @@ const products = [
     name: 'Designer Dress',
     price: 349.99,
     image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=1973&auto=format&fit=crop',
+    hoverImage: 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=1974&auto=format&fit=crop',
     category: 'Women'
   }
 ];
@@ -73,6 +79,7 @@ const BestSellers = () => {
                     name={product.name}
                     price={product.price}
                     image={product.image}
+                    hoverImage={product.hoverImage}
                     category={product.category}
                   />
                 </div>
