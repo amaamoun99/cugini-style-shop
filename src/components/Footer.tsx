@@ -41,8 +41,8 @@ const Footer = () => {
             <h3 className="text-lg font-medium mb-4 uppercase tracking-wider">Contact</h3>
             <ul className="space-y-2 text-gray-300">
               <li>Email: info@cugini.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
-              <li>123 Fashion Street,<br /> Milan, Italy 20123</li>
+              <li>Phone: +20 0102004197</li>
+              <li>Masr elgdida,<br /> Egypy</li>
             </ul>
           </div>
         </div>

@@ -22,8 +22,8 @@ const Index = () => {
         <BrandStory />
         <DiscoverCollection />
         <NewArrivals />
-        <InstagramFeed />
-        {/* <Newsletter /> */}
+        {/* <InstagramFeed /> */}
+        <Newsletter />
       </main>
       <Footer />
     </div>
