@@ -3,38 +3,34 @@ import ProductCard from './ProductCard';
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import img1 from '@/assets/images/IMG-20250403-WA0018.jpg';
-import img2 from '@/assets/images/IMG-20250403-WA0013.jpg';
-import img3 from '@/assets/images/IMG-20250403-WA0011.jpg';
-import img4 from '@/assets/images/DSC00400.jpg';
 
 const products = [
   {
     id: 1,
     name: 'Black Borgia',
     price: 900.00,
-    image: img1,
+    image: '/images/IMG-20250403-WA0018.jpg',
     category: 'Men'
   },
   {
     id: 2,
     name: ' SFORZA Beige pinstriped pants',
     price: 189.99,
-    image: img2,
+    image: '/images/IMG-20250403-WA0013.jpg',
     category: 'Women'
   },
   {
     id: 3,
     name: 'PALLADIO Tailored pants',
     price: 249.99,
-    image: img3,
+    image: '/images/IMG-20250403-WA0011.jpg',
     category: 'Men'
   },
   {
     id: 4,
     name: 'PALLADIO Tailored pants',
     price: 249.99,
-    image: img4,
+    image: '/images/DSC00400.jpg',
     category: 'Men'
   },
 ];
