@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MenuIcon, ShoppingCart, Search, User, X, Heart } from 'lucide-react';
@@ -44,8 +45,8 @@ const Navbar = () => {
             <Link to="/shop/men" className="nav-link">Men</Link>
             <Link to="/shop/women" className="nav-link">Women</Link>
             <Link to="/shop" className="nav-link">Shop All</Link>
-            <Link to="/sale" className="nav-link">Sale</Link>
             <Link to="/new-arrivals" className="nav-link">New Arrivals</Link>
+            <Link to="/sale" className="nav-link">Sale</Link>
           </nav>
 
           {/* Right Icons */}
@@ -132,8 +133,8 @@ const Navbar = () => {
             <Link to="/shop/men" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Men</Link>
             <Link to="/shop/women" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Women</Link>
             <Link to="/shop" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Shop All</Link>
-            <Link to="/sale" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Sale</Link>
             <Link to="/new-arrivals" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>New Arrivals</Link>
+            <Link to="/sale" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Sale</Link>
           </nav>
         </div>
       )}
