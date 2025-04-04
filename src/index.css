@@ -96,6 +96,15 @@
     @apply text-3xl md:text-4xl font-serif font-medium text-cugini-dark mb-6 relative italic;
   }
 
+  /* New luxury decorative line style */
+  .luxury-line {
+    @apply flex items-center justify-center gap-2 my-6;
+  }
+  
+  .luxury-line-element {
+    @apply bg-cugini-golden;
+  }
+
   /* Fix: Don't use @apply with the group utility */
   .product-card {
     position: relative;
@@ -145,5 +154,40 @@
 
   .carousel-container {
     @apply overflow-hidden;
+  }
+  
+  /* Ralph Lauren inspired corner border style */
+  .rl-border {
+    @apply relative;
+  }
+  
+  .rl-border::before,
+  .rl-border::after,
+  .rl-border > span::before,
+  .rl-border > span::after {
+    @apply content-[''] absolute w-6 h-6 border-cugini-golden opacity-0 transition-opacity duration-500;
+  }
+  
+  .rl-border::before {
+    @apply top-0 left-0 border-t border-l;
+  }
+  
+  .rl-border::after {
+    @apply top-0 right-0 border-t border-r;
+  }
+  
+  .rl-border > span::before {
+    @apply bottom-0 left-0 border-b border-l;
+  }
+  
+  .rl-border > span::after {
+    @apply bottom-0 right-0 border-b border-r;
+  }
+  
+  .group:hover .rl-border::before,
+  .group:hover .rl-border::after,
+  .group:hover .rl-border > span::before,
+  .group:hover .rl-border > span::after {
+    @apply opacity-100;
   }
 }
