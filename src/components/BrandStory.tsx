@@ -22,7 +22,7 @@ const BrandStory = () => {
             <p className="text-cugini-dark mb-8">
               In the 1950s, he built a tailoring house where every stitch was made with precision and love. Though no one in our family continued his craft, we refused to let it fade. CUGINI brings his passion back to life, crafting high-quality, tailored pants designed for those who appreciate effortless elegance.
             </p>
-            <Link to="/about" className="btn-vintage">Discover Our Heritage</Link>
+            <Link to="/about" className="">Discover Our Heritage</Link>
           </div>
         </div>
       </div>

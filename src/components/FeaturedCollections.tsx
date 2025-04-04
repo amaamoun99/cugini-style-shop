@@ -30,7 +30,7 @@ const FeaturedCollections = () => {
           <h2 className="text-4xl md:text-5xl font-serif text-cugini-dark tracking-wider mb-6">Featured Collections</h2>
           
           {/* Premium decorative line similar to Ralph Lauren */}
-          <div className="flex justify-center items-center gap-2 mb-6">
+          <div className="flex justify-center items-center gap-2 mb-16  ">
             <div className="h-px w-12 bg-cugini-golden"></div>
             <div className="h-1 w-1 rounded-full bg-cugini-golden"></div>
             <div className="h-px w-24 bg-cugini-golden"></div>
@@ -41,7 +41,7 @@ const FeaturedCollections = () => {
           </div>
           
           <p className="text-lg font-serif text-cugini-dark/80 italic tracking-wide max-w-2xl mx-auto">
-            Destinations for timeless style, from elegant classics to new collections
+            Destinations for timeless style Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, beatae! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, quasi.
           </p>
         </div>
         
