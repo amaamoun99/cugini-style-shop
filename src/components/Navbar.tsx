@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MenuIcon, ShoppingCart, Search, User, X } from 'lucide-react';
+import { MenuIcon, ShoppingCart, Search, User, X, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
@@ -42,8 +41,9 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-6">
             <Link to="/" className="nav-link">Home</Link>
-            <Link to="/men" className="nav-link">Men</Link>
-            <Link to="/women" className="nav-link">Women</Link>
+            <Link to="/shop/men" className="nav-link">Men</Link>
+            <Link to="/shop/women" className="nav-link">Women</Link>
+            <Link to="/shop" className="nav-link">Shop All</Link>
             <Link to="/sale" className="nav-link">Sale</Link>
             <Link to="/new-arrivals" className="nav-link">New Arrivals</Link>
           </nav>
@@ -58,6 +58,15 @@ const Navbar = () => {
             >
               <Search className="h-5 w-5 text-cugini-dark" />
             </Button>
+            <Link to="/wishlist">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                aria-label="Wishlist"
+              >
+                <Heart className="h-5 w-5 text-cugini-dark" />
+              </Button>
+            </Link>
             <Link to="/account">
               <Button 
                 variant="ghost" 
@@ -72,8 +81,10 @@ const Navbar = () => {
                 variant="ghost" 
                 size="icon"
                 aria-label="Cart"
+                className="relative"
               >
                 <ShoppingCart className="h-5 w-5 text-cugini-dark" />
+                <span className="absolute -top-1 -right-1 bg-cugini-golden text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">2</span>
               </Button>
             </Link>
           </div>
@@ -118,8 +129,9 @@ const Navbar = () => {
           </div>
           <nav className="container py-8 flex flex-col space-y-4">
             <Link to="/" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Home</Link>
-            <Link to="/men" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Men</Link>
-            <Link to="/women" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Women</Link>
+            <Link to="/shop/men" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Men</Link>
+            <Link to="/shop/women" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Women</Link>
+            <Link to="/shop" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Shop All</Link>
             <Link to="/sale" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Sale</Link>
             <Link to="/new-arrivals" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>New Arrivals</Link>
           </nav>
