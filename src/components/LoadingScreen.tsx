@@ -27,28 +27,24 @@ const LoadingScreen = () => {
   if (!isLoading) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-cugini-dark flex items-center justify-center">
+    <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
       <div className="flex flex-col items-center">
-        {/* Logo with animation */}
-        <div className="relative">
-          <div className="text-5xl md:text-7xl font-serif text-white tracking-wider relative">
-            <span className="opacity-0 animate-[fade-in_2s_ease-out_forwards]">CUGINI</span>
-            <div className="absolute -bottom-2 left-0 w-0 h-0.5 bg-cugini-golden animate-[grow-width_1.5s_ease-out_forwards_0.5s]"></div>
-          </div>
-          <div className="absolute -top-4 -left-4 w-full h-full border border-cugini-golden opacity-0 animate-[fade-in_0.5s_ease-out_forwards_0.8s,grow-border_1s_ease-out_forwards_0.8s]"></div>
+        {/* Simple elegant logo */}
+        <div className="text-6xl font-serif text-cugini-dark mb-4">
+          CUGINI
         </div>
         
-        {/* Tagline */}
-        <div className="mt-4 text-cugini-taupe text-sm md:text-base italic opacity-0 animate-[fade-in_0.5s_ease-out_forwards_1s]">
-          Timeless Italian Fashion
-        </div>
-        
-        {/* Progress bar */}
-        <div className="mt-8 w-48 h-0.5 bg-cugini-taupe/30 relative">
+        {/* Minimal progress bar */}
+        <div className="w-48 h-[1px] bg-cugini-taupe/30 relative">
           <div 
             className="absolute top-0 left-0 h-full bg-cugini-golden transition-all duration-100 ease-out"
             style={{ width: `${progress}%` }}
           ></div>
+        </div>
+        
+        {/* Tagline */}
+        <div className="mt-4 text-cugini-dark text-sm font-serif italic">
+          Tailored for the Timeless
         </div>
       </div>
     </div>
