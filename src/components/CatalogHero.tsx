@@ -7,7 +7,7 @@ const CatalogHero = () => {
     <div className="relative bg-gray-100 py-16 md:py-24">
       <div className="absolute inset-0 overflow-hidden">
         <img 
-          src="/images/DSC00411.jpg" 
+          src="/images/IMG-20250403-WA0003.jpg" 
           alt="Catalog Hero" 
           className="w-full h-full object-cover opacity-30"
         />
@@ -22,12 +22,12 @@ const CatalogHero = () => {
           Shop Our Limited Pieces – Crafted with passion and steeped in heritage
         </p>
         
-        <a 
+        {/* <a 
           href="#product-grid" 
           className="inline-flex items-center px-8 py-3 bg-cugini-golden text-white hover:bg-cugini-dark transition-colors"
         >
           Explore Now <ArrowRight className="ml-2 h-4 w-4" />
-        </a>
+        </a> */}
       </div>
     </div>
   );

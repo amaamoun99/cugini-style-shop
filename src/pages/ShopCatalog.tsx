@@ -7,37 +7,38 @@ import CatalogHero from '@/components/CatalogHero';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 // Sample product data
+
 const products = [
   {
-    id: 1,
-    name: 'Italian Wool Blazer',
-    price: 399.99,
+    id: 5,
+    name: 'Striped Linen Shirt',
+    price: 149.99,
     image: '/images/DSC00399.jpg',
     hoverImage: '/images/DSC00400.jpg',
     category: 'men'
   },
   {
-    id: 2,
-    name: 'Linen Summer Shirt',
-    price: 149.99,
-    image: '/images/DSC00402.jpg',
-    hoverImage: '/images/DSC00405.jpg',
-    category: 'men'
-  },
-  {
-    id: 3,
-    name: 'Silk Evening Dress',
-    price: 329.99,
-    image: '/images/IMG-20250403-WA0010.jpg',
-    hoverImage: '/images/IMG-20250403-WA0011.jpg',
+    id: 6,
+    name: 'Silk Blouse',
+    price: 169.99,
+    image: '/images/IMG-20250403-WA0009.jpg',
+    hoverImage: '/images/IMG-20250403-WA0010.jpg',
     category: 'women'
   },
   {
-    id: 4,
-    name: 'Cashmere Sweater',
-    price: 259.99,
+    id: 7,
+    name: 'Cotton Chino Pants',
+    price: 129.99,
     image: '/images/IMG-20250403-WA0012.jpg',
-    hoverImage: '/images/IMG-20250403-WA0013.jpg',
+    hoverImage: '/images/IMG-20250403-WA0016.jpg',
+    category: 'men'
+  },
+  {
+    id: 8,
+    name: 'Leather Handbag',
+    price: 219.99,
+    image: '/images/IMG-20250403-WA0013.jpg',
+    hoverImage: '/images/IMG-20250403-WA0014.jpg',
     category: 'women'
   }
 ];

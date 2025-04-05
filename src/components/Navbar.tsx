@@ -59,7 +59,7 @@ const Navbar = () => {
             >
               <Search className="h-5 w-5 text-cugini-dark" />
             </Button>
-            <Link to="/wishlist">
+            {/* <Link to="/wishlist">
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -67,8 +67,8 @@ const Navbar = () => {
               >
                 <Heart className="h-5 w-5 text-cugini-dark" />
               </Button>
-            </Link>
-            <Link to="/account">
+            </Link> */}
+            {/* <Link to="/account">
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -76,7 +76,7 @@ const Navbar = () => {
               >
                 <User className="h-5 w-5 text-cugini-dark" />
               </Button>
-            </Link>
+            </Link> */}
             <Link to="/cart">
               <Button 
                 variant="ghost" 
