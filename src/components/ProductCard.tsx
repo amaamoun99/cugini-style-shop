@@ -104,4 +104,3 @@ const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: Pr
 };
 
 export default ProductCard;
-
