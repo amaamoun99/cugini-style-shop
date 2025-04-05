@@ -10,6 +10,7 @@ import ProductDetails from "./pages/ProductDetails";
 import NotFound from "./pages/NotFound";
 import LoadingScreen from "./components/LoadingScreen";
 import AboutPage from "./pages/AboutPage";
+import CheckoutPage from "./pages/CheckoutPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/shop" element={<ShopCatalog />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           {/* <Route path="/shop/men" element={<ShopCatalog />} /> */}
           {/* <Route path="/shop/women" element={<ShopCatalog />} /> */}
           {/* <Route path="/product/:id" element={<ProductDetails />} /> */}
