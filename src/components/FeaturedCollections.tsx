@@ -72,13 +72,13 @@ const FeaturedCollections = () => {
                       className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                     />
 
-                    {/* Decorative custom-shaped border that appears on hover - now with custom shape that curves at corners */}
-                    <div className="absolute inset-10 border-0 group-hover:border-[1px] border-cugini-golden opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-500">
-                      {/* Corner accents for the Ralph Lauren style border */}
-                      <div className="absolute -top-[5px] -left-[5px] w-4 h-4 border-t border-l border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
-                      <div className="absolute -top-[5px] -right-[5px] w-4 h-4 border-t border-r border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
-                      <div className="absolute -bottom-[5px] -left-[5px] w-4 h-4 border-b border-l border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
-                      <div className="absolute -bottom-[5px] -right-[5px] w-4 h-4 border-b border-r border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
+                    {/* Adjusted decorative border that appears on hover - now taller and wider to fit the model */}
+                    <div className="absolute inset-4 border-0 group-hover:border-[1px] border-cugini-golden opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-500">
+                      {/* Corner accents for the Ralph Lauren style border - adjusted for better positioning */}
+                      <div className="absolute -top-[5px] -left-[5px] w-6 h-6 border-t border-l border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
+                      <div className="absolute -top-[5px] -right-[5px] w-6 h-6 border-t border-r border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
+                      <div className="absolute -bottom-[5px] -left-[5px] w-6 h-6 border-b border-l border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
+                      <div className="absolute -bottom-[5px] -right-[5px] w-6 h-6 border-b border-r border-cugini-golden group-hover:opacity-100 opacity-0 transition-opacity duration-500"></div>
                     </div>
 
                     {/* Gradient overlay */}
