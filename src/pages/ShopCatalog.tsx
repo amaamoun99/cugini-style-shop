@@ -61,7 +61,7 @@ const ShopCatalog = () => {
         {/* Category Navigation */}
         <div className="container-custom py-8">
           <Tabs defaultValue="all" className="w-full" onValueChange={setActiveCategory}>
-            <TabsList className="w-full flex justify-center space-x-4 mb-8 border-b border-gray-200 overflow-auto pb-2">
+            <TabsList className="w-full flex justify-center align-middle space-x-4 mb-8 border-b border-gray-200 overflow-hidden pb-2">
               <TabsTrigger 
                 value="all"
                 className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
