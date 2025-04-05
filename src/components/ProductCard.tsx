@@ -11,9 +11,10 @@ interface ProductCardProps {
   image: string;
   category: string;
   hoverImage?: string; // Optional second image for hover effect
+  sizes?: string[]; // Add sizes property
 }
 
-const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCardProps) => {
+const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: ProductCardProps) => {
   // Use default image as hover image if none provided
   const secondaryImage = hoverImage || image;
   const [isWishlisted, setIsWishlisted] = useState(false);
@@ -30,6 +31,9 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
     e.stopPropagation();
     setIsQuickViewOpen(true);
   };
+  
+  // Default sizes if none provided
+  const defaultSizes = ['S', 'M', 'L', 'XL'];
   
   return (
     <div className="product-card group relative" id="product-grid">
@@ -91,7 +95,8 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
           price,
           image,
           hoverImage,
-          category
+          category,
+          sizes: sizes || defaultSizes
         }}
       />
     </div>
@@ -99,3 +104,4 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
 };
 
 export default ProductCard;
+

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -13,6 +14,7 @@ interface ProductDetails {
   hoverImage?: string;
   category: string;
   description?: string;
+  sizes?: string[]; // Add sizes property
 }
 
 interface QuickViewModalProps {
@@ -25,6 +27,10 @@ const QuickViewModal = ({ open, onOpenChange, product }: QuickViewModalProps) =>
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [currentImage, setCurrentImage] = useState(product.image);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  
+  // Default sizes if none provided
+  const availableSizes = product.sizes || ['S', 'M', 'L', 'XL'];
   
   const decreaseQuantity = () => {
     if (quantity > 1) {
@@ -41,7 +47,7 @@ const QuickViewModal = ({ open, onOpenChange, product }: QuickViewModalProps) =>
   };
   
   const handleAddToCart = () => {
-    console.log(`Added ${quantity} of ${product.name} to cart`);
+    console.log(`Added ${quantity} of ${product.name} (Size: ${selectedSize}) to cart`);
     // Here you would add the product to the cart
     onOpenChange(false);
   };
@@ -111,8 +117,44 @@ const QuickViewModal = ({ open, onOpenChange, product }: QuickViewModalProps) =>
               <div className="h-px w-12 luxury-line-element"></div>
             </div>
             
+            {/* Size Selection */}
+            <div className="mt-4 mb-6">
+              <h3 className="text-sm uppercase tracking-wider font-serif mb-3">Size</h3>
+              <RadioGroup 
+                value={selectedSize || undefined} 
+                onValueChange={setSelectedSize}
+                className="flex flex-wrap gap-3"
+              >
+                {availableSizes.map((size) => (
+                  <div key={size} className="relative">
+                    <RadioGroupItem
+                      value={size}
+                      id={`size-${size}`}
+                      className="sr-only"
+                    />
+                    <label
+                      htmlFor={`size-${size}`}
+                      className={cn(
+                        "flex h-10 w-10 cursor-pointer items-center justify-center rounded-none border text-sm uppercase font-medium transition-colors hover:bg-cugini-golden/10",
+                        selectedSize === size
+                          ? "border-cugini-golden bg-cugini-golden/10 text-cugini-dark font-bold"
+                          : "border-gray-200 text-gray-500"
+                      )}
+                    >
+                      {size}
+                    </label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {selectedSize && (
+                <p className="text-xs text-gray-500 mt-2 italic">
+                  Selected size: {selectedSize}
+                </p>
+              )}
+            </div>
+            
             {/* Quantity Selector */}
-            <div className="flex items-center mt-6 mb-4">
+            <div className="flex items-center mt-4 mb-6">
               <span className="text-sm uppercase tracking-wider font-serif mr-4">Quantity:</span>
               <div className="flex items-center border border-gray-300">
                 <button 
@@ -135,7 +177,8 @@ const QuickViewModal = ({ open, onOpenChange, product }: QuickViewModalProps) =>
             <div className="flex flex-col sm:flex-row gap-3 mt-auto">
               <Button 
                 onClick={handleAddToCart}
-                className="bg-cugini-dark hover:bg-cugini-golden text-white text-xs uppercase tracking-wider py-6 flex-1 transition-colors"
+                disabled={!selectedSize}
+                className="bg-cugini-dark hover:bg-cugini-golden text-white text-xs uppercase tracking-wider py-6 flex-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingBag className="mr-2 h-4 w-4" /> Add to Cart
               </Button>
@@ -156,6 +199,12 @@ const QuickViewModal = ({ open, onOpenChange, product }: QuickViewModalProps) =>
               </Button>
             </div>
             
+            {!selectedSize && (
+              <p className="text-xs text-red-500 mt-2 text-center">
+                Please select a size to add to cart
+              </p>
+            )}
+            
             {/* View Full Details Link */}
             <a 
               href={`/product/${product.id}`} 
@@ -171,3 +220,4 @@ const QuickViewModal = ({ open, onOpenChange, product }: QuickViewModalProps) =>
 };
 
 export default QuickViewModal;
+
