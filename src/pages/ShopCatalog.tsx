@@ -7,7 +7,6 @@ import CatalogHero from '@/components/CatalogHero';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 // Sample product data
-
 const products = [
   {
     id: 5,
@@ -85,7 +84,7 @@ const ShopCatalog = () => {
             {/* Product Grid */}
             <div className="container-custom">
               <TabsContent value="all" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProducts.map(product => (
                     <ProductCard 
                       key={product.id}
@@ -101,7 +100,7 @@ const ShopCatalog = () => {
               </TabsContent>
               
               <TabsContent value="men" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProducts.map(product => (
                     <ProductCard 
                       key={product.id}
@@ -117,7 +116,7 @@ const ShopCatalog = () => {
               </TabsContent>
               
               <TabsContent value="women" className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProducts.map(product => (
                     <ProductCard 
                       key={product.id}

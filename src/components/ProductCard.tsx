@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, ShoppingCart } from 'lucide-react';
+import { Heart, Eye } from 'lucide-react';
+import QuickViewModal from './QuickViewModal';
 
 interface ProductCardProps {
   id: number;
@@ -16,11 +17,18 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
   // Use default image as hover image if none provided
   const secondaryImage = hoverImage || image;
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
   
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsWishlisted(!isWishlisted);
+  };
+  
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsQuickViewOpen(true);
   };
   
   return (
@@ -32,7 +40,7 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
             src={image} 
             alt={name} 
             loading="lazy"
-            className="product-image w-full h-[400px] object-cover transition-opacity duration-700 ease-in-out"
+            className="product-image w-full h-[500px] object-cover transition-opacity duration-700 ease-in-out"
           />
           
           {/* Hover image with overlay */}
@@ -52,8 +60,11 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
           <p className="product-price font-serif italic text-cugini-golden mt-1">${price.toFixed(2)}</p>
           
           <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button className="bg-cugini-dark hover:bg-cugini-golden text-white text-xs uppercase tracking-wider py-2 px-4 transition-colors w-full">
-              View Details
+            <button 
+              onClick={handleQuickView}
+              className="bg-cugini-dark hover:bg-cugini-golden text-white text-xs uppercase tracking-wider py-2 px-4 transition-colors w-full flex items-center justify-center"
+            >
+              <Eye className="mr-2 h-4 w-4" /> Quick View
             </button>
           </div>
         </div>
@@ -69,6 +80,20 @@ const ProductCard = ({ id, name, price, image, category, hoverImage }: ProductCa
           className={`h-5 w-5 ${isWishlisted ? 'fill-cugini-golden text-cugini-golden' : 'text-gray-600'}`} 
         />
       </button>
+      
+      {/* Quick View Modal */}
+      <QuickViewModal 
+        open={isQuickViewOpen}
+        onOpenChange={setIsQuickViewOpen}
+        product={{
+          id,
+          name,
+          price,
+          image,
+          hoverImage,
+          category
+        }}
+      />
     </div>
   );
 };
