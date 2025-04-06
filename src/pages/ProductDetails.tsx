@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { ArrowRight, Minus, Plus, Star, Heart, Share2, ZoomIn, X } from 'lucide-react';
+import { ArrowRight, Minus, Plus, Star, ShoppingBag, Share2, ZoomIn, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Carousel,
@@ -19,7 +18,6 @@ import { format, addDays } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
-// Sample product data - in a real app, this would come from an API
 const products = [
   {
     id: 1,
@@ -128,13 +126,11 @@ const ProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [selectedSize, setSelectedSize] = useState(product.sizes[1]); // Default to M
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [zoomOpen, setZoomOpen] = useState(false);
   const isMobile = useIsMobile();
   
   const { toast } = useToast();
   
-  // Calculate expected delivery date (5 days from today)
   const deliveryDate = addDays(new Date(), 5);
   const formattedDeliveryDate = format(deliveryDate, "MMMM d, yyyy");
   
@@ -145,12 +141,9 @@ const ProductDetails = () => {
     });
   };
   
-  const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast({
-      title: isWishlisted ? "Removed from Wishlist" : "Added to Wishlist",
-      description: `${product.name} has been ${isWishlisted ? "removed from" : "added to"} your wishlist.`,
-    });
+  const handleBuyNow = () => {
+    handleAddToCart();
+    window.location.href = "/checkout";
   };
   
   const decrementQuantity = () => {
@@ -167,7 +160,6 @@ const ProductDetails = () => {
     const url = window.location.href;
     const title = `Check out this amazing product: ${product.name}`;
     
-    // If Web Share API is available (mostly on mobile)
     if (navigator.share) {
       try {
         await navigator.share({
@@ -181,11 +173,9 @@ const ProductDetails = () => {
         });
       } catch (error) {
         console.error("Error sharing:", error);
-        // Fallback to clipboard
         copyToClipboard(url);
       }
     } else {
-      // Fallback for desktop
       copyToClipboard(url);
     }
   };
@@ -208,7 +198,6 @@ const ProductDetails = () => {
       });
   };
   
-  // Image zoom modal content
   const zoomModalContent = (
     <div className="relative w-full h-full flex items-center justify-center">
       <div className="absolute top-4 right-4 z-10">
@@ -231,22 +220,18 @@ const ProductDetails = () => {
     </div>
   );
   
-  // Sample related products (excluding current product)
   const relatedProducts = products
     .filter(p => p.category === product.category && p.id !== product.id)
-    .slice(0, 2); // Show at most 2 related products
+    .slice(0, 2);
   
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
       <main className="flex-grow">
-        {/* Product Hero Section */}
         <div className="container-custom py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Left Side: Product Images */}
             <div className="product-images">
-              {/* Main Image */}
               <div className="relative aspect-square overflow-hidden mb-4">
                 <img
                   src={product.images[selectedImage]}
@@ -254,7 +239,6 @@ const ProductDetails = () => {
                   className="w-full h-full object-cover"
                 />
                 
-                {/* Zoom Button */}
                 <button
                   onClick={() => setZoomOpen(true)}
                   className="absolute bottom-4 right-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
@@ -264,7 +248,6 @@ const ProductDetails = () => {
                 </button>
               </div>
               
-              {/* Thumbnail Images */}
               <div className="flex space-x-2 overflow-x-auto">
                 {product.images.map((image, index) => (
                   <button
@@ -286,23 +269,19 @@ const ProductDetails = () => {
               </div>
             </div>
             
-            {/* Right Side: Product Info & Purchase Options */}
             <div className="product-info">
               <h1 className="text-3xl md:text-4xl font-serif text-cugini-dark mb-2">
                 {product.name}
               </h1>
               
-              {/* Price */}
               <p className="text-2xl text-cugini-golden font-serif italic mb-4">
                 ${product.price.toFixed(2)}
               </p>
               
-              {/* Short Description */}
               <p className="text-gray-600 mb-6">
                 {product.description}
               </p>
               
-              {/* Estimated Delivery */}
               <div className="bg-gray-50 p-4 mb-8 border border-gray-200">
                 <p className="text-cugini-dark font-medium">
                   Estimated Delivery: <span className="text-cugini-golden">{formattedDeliveryDate}</span>
@@ -312,7 +291,6 @@ const ProductDetails = () => {
                 </p>
               </div>
               
-              {/* Size Selection */}
               <div className="mb-6">
                 <h3 className="font-medium text-cugini-dark mb-2">Size: <span className="font-normal">{selectedSize}</span></h3>
                 <div className="flex flex-wrap gap-2">
@@ -335,7 +313,6 @@ const ProductDetails = () => {
                 </p>
               </div>
               
-              {/* Quantity Selector */}
               <div className="mb-8">
                 <h3 className="font-medium text-cugini-dark mb-2">Quantity:</h3>
                 <div className="flex items-center border border-gray-300 w-fit">
@@ -361,34 +338,24 @@ const ProductDetails = () => {
                 </div>
               </div>
               
-              {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
-                  onClick={handleAddToCart} 
-                  className="flex-1 bg-cugini-dark hover:bg-cugini-golden text-white py-3 px-8 transition-colors"
+                  onClick={handleBuyNow} 
+                  className="flex-1 bg-cugini-golden hover:bg-cugini-dark text-white py-3 px-8 transition-colors"
                 >
-                  Add to Cart
+                  <ShoppingBag className="mr-2 h-5 w-5" />
+                  Buy Now
                 </Button>
                 
                 <Button 
                   variant="outline"
-                  onClick={toggleWishlist}
-                  className={`flex-1 border ${
-                    isWishlisted 
-                      ? "border-cugini-golden text-cugini-golden" 
-                      : "border-gray-300"
-                  } hover:border-cugini-golden py-3 px-8 transition-colors`}
+                  onClick={handleAddToCart}
+                  className="flex-1 border border-gray-300 hover:border-cugini-golden py-3 px-8 transition-colors"
                 >
-                  <Heart 
-                    className={`mr-2 h-5 w-5 ${
-                      isWishlisted ? "fill-cugini-golden" : ""
-                    }`} 
-                  />
-                  {isWishlisted ? "Wishlisted" : "Add to Wishlist"}
+                  Add to Cart
                 </Button>
               </div>
               
-              {/* Share Button */}
               <button 
                 className="flex items-center text-gray-500 hover:text-cugini-dark mt-4"
                 onClick={handleShare}
@@ -400,7 +367,6 @@ const ProductDetails = () => {
           </div>
         </div>
         
-        {/* Product Details Section */}
         <div className="bg-gray-50 py-12">
           <div className="container-custom">
             <Tabs defaultValue="description" className="w-full">
@@ -425,7 +391,6 @@ const ProductDetails = () => {
                 </TabsTrigger>
               </TabsList>
               
-              {/* Description Tab */}
               <TabsContent value="description" className="mt-0">
                 <div className="max-w-3xl mx-auto">
                   <h2 className="text-2xl font-serif text-cugini-dark mb-4">Product Features</h2>
@@ -437,7 +402,6 @@ const ProductDetails = () => {
                 </div>
               </TabsContent>
               
-              {/* Care Tab */}
               <TabsContent value="care" className="mt-0">
                 <div className="max-w-3xl mx-auto">
                   <h2 className="text-2xl font-serif text-cugini-dark mb-4">Care Instructions</h2>
@@ -445,11 +409,10 @@ const ProductDetails = () => {
                 </div>
               </TabsContent>
               
-              {/* Reviews Tab */}
               <TabsContent value="reviews" className="mt-0">
                 <div className="max-w-3xl mx-auto">
                   <div className="flex items-center mb-6">
-                    <div className="flex items-center">
+                    <div className="flex items-center text-yellow-500">
                       <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
                       <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
                       <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
@@ -465,7 +428,6 @@ const ProductDetails = () => {
                     Write a Review
                   </Button>
                   
-                  {/* Sample Reviews */}
                   <div className="space-y-6">
                     <div className="border-b border-gray-200 pb-6">
                       <div className="flex items-center mb-2">
@@ -503,7 +465,6 @@ const ProductDetails = () => {
           </div>
         </div>
         
-        {/* Related Products Section */}
         {relatedProducts.length > 0 && (
           <div className="container-custom py-16">
             <h2 className="text-2xl md:text-3xl font-serif text-cugini-dark text-center mb-8">
@@ -548,7 +509,6 @@ const ProductDetails = () => {
         )}
       </main>
       
-      {/* Responsive Image Zoom Modal */}
       {isMobile ? (
         <Sheet open={zoomOpen} onOpenChange={setZoomOpen}>
           <SheetContent side="bottom" className="h-[80vh] p-0">
