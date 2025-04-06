@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 
@@ -23,6 +23,12 @@ const collections = [
 ];
 
 const FeaturedCollections = () => {
+  const navigate = useNavigate();
+  
+  const handleCardClick = (link: string) => {
+    navigate(link);
+  };
+  
   return (
     <section className="py-16 bg-white">
       <div className="container-custom">
@@ -47,10 +53,10 @@ const FeaturedCollections = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 max-w-5xl mx-auto">
           {collections.map((collection) => (
-            <Link
+            <div
               key={collection.id}
-              to={collection.link}
-              className="group block"
+              className="group block cursor-pointer"
+              onClick={() => handleCardClick(collection.link)}
             >
               <Card className="overflow-hidden border-cugini-taupe/30 relative">
                 <AspectRatio ratio={3 / 4} className="bg-muted">
@@ -91,7 +97,7 @@ const FeaturedCollections = () => {
                   </div>
                 </AspectRatio>
               </Card>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
