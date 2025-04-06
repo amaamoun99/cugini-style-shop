@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { ArrowRight, Minus, Plus, Star, Heart, Share2 } from 'lucide-react';
+import { ArrowRight, Minus, Plus, Star, Heart, Share2, ZoomIn, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +14,10 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { format, addDays } from "date-fns";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 // Sample product data - in a real app, this would come from an API
 const products = [
@@ -125,8 +129,14 @@ const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState(product.sizes[1]); // Default to M
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [zoomOpen, setZoomOpen] = useState(false);
+  const isMobile = useIsMobile();
   
   const { toast } = useToast();
+  
+  // Calculate expected delivery date (5 days from today)
+  const deliveryDate = addDays(new Date(), 5);
+  const formattedDeliveryDate = format(deliveryDate, "MMMM d, yyyy");
   
   const handleAddToCart = () => {
     toast({
@@ -153,6 +163,74 @@ const ProductDetails = () => {
     setQuantity(quantity + 1);
   };
   
+  const handleShare = async () => {
+    const url = window.location.href;
+    const title = `Check out this amazing product: ${product.name}`;
+    
+    // If Web Share API is available (mostly on mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text: product.description,
+          url
+        });
+        toast({
+          title: "Shared Successfully",
+          description: "Thanks for sharing our product!",
+        });
+      } catch (error) {
+        console.error("Error sharing:", error);
+        // Fallback to clipboard
+        copyToClipboard(url);
+      }
+    } else {
+      // Fallback for desktop
+      copyToClipboard(url);
+    }
+  };
+  
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        toast({
+          title: "Link Copied!",
+          description: "Product link copied to clipboard.",
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+        toast({
+          title: "Share Failed",
+          description: "Could not copy link to clipboard.",
+          variant: "destructive"
+        });
+      });
+  };
+  
+  // Image zoom modal content
+  const zoomModalContent = (
+    <div className="relative w-full h-full flex items-center justify-center">
+      <div className="absolute top-4 right-4 z-10">
+        <Button 
+          variant="outline" 
+          size="icon" 
+          className="rounded-full bg-white/80 hover:bg-white"
+          onClick={() => setZoomOpen(false)}
+        >
+          <X className="h-5 w-5" />
+        </Button>
+      </div>
+      <div className="p-4 max-w-full max-h-full overflow-auto">
+        <img
+          src={product.images[selectedImage]}
+          alt={product.name}
+          className="max-w-full max-h-full object-contain"
+        />
+      </div>
+    </div>
+  );
+  
   // Sample related products (excluding current product)
   const relatedProducts = products
     .filter(p => p.category === product.category && p.id !== product.id)
@@ -175,6 +253,15 @@ const ProductDetails = () => {
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
+                
+                {/* Zoom Button */}
+                <button
+                  onClick={() => setZoomOpen(true)}
+                  className="absolute bottom-4 right-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-md transition-all"
+                  aria-label="Zoom Image"
+                >
+                  <ZoomIn className="h-5 w-5 text-cugini-dark" />
+                </button>
               </div>
               
               {/* Thumbnail Images */}
@@ -211,52 +298,19 @@ const ProductDetails = () => {
               </p>
               
               {/* Short Description */}
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-600 mb-6">
                 {product.description}
               </p>
               
-              {/* Color Selection */}
-              {/* <div className="mb-6">
-                <h3 className="font-medium text-cugini-dark mb-2">Color: <span className="font-normal">{selectedColor}</span></h3>
-                <div className="flex space-x-3">
-                  {product.colors.map(color => (
-                    <button
-                      key={color}
-                      className={`w-10 h-10 border ${
-                        selectedColor === color 
-                          ? "border-cugini-golden ring-1 ring-cugini-golden" 
-                          : "border-gray-300"
-                      } rounded-full`}
-                      style={{ 
-                        backgroundColor: color.toLowerCase(),
-                        background: color.toLowerCase() === "white" 
-                          ? "#ffffff" 
-                          : color.toLowerCase() === "black" 
-                          ? "#000000" 
-                          : color.toLowerCase() === "navy" 
-                          ? "#000080" 
-                          : color.toLowerCase() === "gray" 
-                          ? "#808080" 
-                          : color.toLowerCase() === "blue" 
-                          ? "#0000ff" 
-                          : color.toLowerCase() === "sand" 
-                          ? "#c2b280" 
-                          : color.toLowerCase() === "emerald" 
-                          ? "#50c878" 
-                          : color.toLowerCase() === "burgundy" 
-                          ? "#800020" 
-                          : color.toLowerCase() === "cream" 
-                          ? "#fffdd0" 
-                          : color.toLowerCase() === "camel" 
-                          ? "#c19a6b" 
-                          : color.toLowerCase()
-                      }}
-                      onClick={() => setSelectedColor(color)}
-                      aria-label={`Select ${color} color`}
-                    />
-                  ))}
-                </div>
-              </div> */}
+              {/* Estimated Delivery */}
+              <div className="bg-gray-50 p-4 mb-8 border border-gray-200">
+                <p className="text-cugini-dark font-medium">
+                  Estimated Delivery: <span className="text-cugini-golden">{formattedDeliveryDate}</span>
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Order within 24 hours for fastest processing
+                </p>
+              </div>
               
               {/* Size Selection */}
               <div className="mb-6">
@@ -335,7 +389,10 @@ const ProductDetails = () => {
               </div>
               
               {/* Share Button */}
-              <button className="flex items-center text-gray-500 hover:text-cugini-dark mt-4">
+              <button 
+                className="flex items-center text-gray-500 hover:text-cugini-dark mt-4"
+                onClick={handleShare}
+              >
                 <Share2 className="h-4 w-4 mr-2" />
                 <span>Share</span>
               </button>
@@ -490,6 +547,21 @@ const ProductDetails = () => {
           </div>
         )}
       </main>
+      
+      {/* Responsive Image Zoom Modal */}
+      {isMobile ? (
+        <Sheet open={zoomOpen} onOpenChange={setZoomOpen}>
+          <SheetContent side="bottom" className="h-[80vh] p-0">
+            {zoomModalContent}
+          </SheetContent>
+        </Sheet>
+      ) : (
+        <Dialog open={zoomOpen} onOpenChange={setZoomOpen}>
+          <DialogContent className="max-w-4xl p-0 bg-transparent border-none">
+            {zoomModalContent}
+          </DialogContent>
+        </Dialog>
+      )}
       
       <Footer />
     </div>
