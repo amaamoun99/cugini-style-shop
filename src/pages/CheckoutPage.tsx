@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronRight, ChevronLeft, MapPin, CreditCard, ShoppingBag, X, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { ChevronLeft, CreditCard } from "lucide-react";
 
 // Mock data for the cart items
 const cartItems = [
@@ -33,7 +33,6 @@ const cartItems = [
 ];
 
 const CheckoutPage: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
   const [email, setEmail] = useState<string>("");
   const [shippingInfo, setShippingInfo] = useState({
     firstName: "",
@@ -47,56 +46,32 @@ const CheckoutPage: React.FC = () => {
   const [shippingMethod, setShippingMethod] = useState<string>("standard");
   const [paymentMethod, setPaymentMethod] = useState<string>("card");
   const [saveInfo, setSaveInfo] = useState<boolean>(false);
+  const [discountCode, setDiscountCode] = useState<string>("");
+  const [discountApplied, setDiscountApplied] = useState<boolean>(false);
   
   // Calculate order summary
   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   const shipping = shippingMethod === "express" ? 15 : 8;
-  const tax = subtotal * 0.08; // Assuming 8% tax
-  const total = subtotal + shipping + tax;
+  const discount = discountApplied ? subtotal * 0.1 : 0; // 10% discount if applied
+  const tax = (subtotal - discount) * 0.08; // 8% tax after discount
+  const total = subtotal + shipping + tax - discount;
   
   const formatPrice = (price: number) => {
     return price.toFixed(2);
   };
   
-  const handleNextStep = () => {
-    setCurrentStep(currentStep + 1);
-    window.scrollTo(0, 0);
-  };
-  
-  const handlePreviousStep = () => {
-    setCurrentStep(currentStep - 1);
-    window.scrollTo(0, 0);
+  const handleApplyDiscount = () => {
+    if (discountCode.trim().toLowerCase() === "cugini10") {
+      setDiscountApplied(true);
+    } else {
+      alert("Invalid discount code");
+    }
   };
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Process payment and order logic would go here
     alert("Order submitted! This would be connected to your payment processor in a real implementation.");
-  };
-  
-  // Progress indicators for each step
-  const renderStepIndicator = () => {
-    return (
-      <div className="flex items-center justify-center space-x-2 mb-8">
-        {[1, 2, 3].map((step) => (
-          <div 
-            key={step} 
-            className={`flex items-center ${currentStep === step ? "text-primary" : "text-muted-foreground"}`}
-          >
-            <div 
-              className={`w-8 h-8 rounded-full flex items-center justify-center border ${
-                currentStep === step ? "border-primary" : "border-muted"
-              } ${currentStep > step ? "bg-primary text-primary-foreground" : ""}`}
-            >
-              {currentStep > step ? "✓" : step}
-            </div>
-            {step < 3 && (
-              <div className={`h-px w-8 mx-1 ${currentStep > step ? "bg-primary" : "bg-muted"}`} />
-            )}
-          </div>
-        ))}
-      </div>
-    );
   };
   
   return (
@@ -108,268 +83,213 @@ const CheckoutPage: React.FC = () => {
           </Link>
         </div>
         
-        {renderStepIndicator()}
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-serif">Checkout</h2>
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Checkout Form */}
           <div className="lg:col-span-2">
-            <Card className="border-muted mb-6">
-              <CardContent className="p-6">
-                {/* Step 1: Information */}
-                {currentStep === 1 && (
-                  <div>
-                    <div className="flex items-center mb-6">
-                      <MapPin className="mr-2 h-5 w-5" />
-                      <h2 className="text-xl font-serif">Contact Information</h2>
+            <form onSubmit={handleSubmit}>
+              <Card className="border-muted mb-6">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-medium mb-4">Contact Information</h3>
+                  <div className="space-y-4 mb-6">
+                    <div>
+                      <Label htmlFor="email">Email</Label>
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Your email address"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <Separator className="my-6" />
+                  
+                  <h3 className="text-lg font-medium mb-4">Shipping Address</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input 
+                        id="firstName" 
+                        value={shippingInfo.firstName}
+                        onChange={(e) => setShippingInfo({...shippingInfo, firstName: e.target.value})}
+                        placeholder="First name"
+                        className="mt-1"
+                        required
+                      />
                     </div>
                     
-                    <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="email">Email</Label>
-                        <Input 
-                          id="email" 
-                          type="email" 
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Your email address"
-                          className="mt-1"
-                        />
-                      </div>
-                      
+                    <div>
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input 
+                        id="lastName" 
+                        value={shippingInfo.lastName}
+                        onChange={(e) => setShippingInfo({...shippingInfo, lastName: e.target.value})}
+                        placeholder="Last name"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <Label htmlFor="address">Address</Label>
+                      <Input 
+                        id="address" 
+                        value={shippingInfo.address}
+                        onChange={(e) => setShippingInfo({...shippingInfo, address: e.target.value})}
+                        placeholder="Street address"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="city">City</Label>
+                      <Input 
+                        id="city" 
+                        value={shippingInfo.city}
+                        onChange={(e) => setShippingInfo({...shippingInfo, city: e.target.value})}
+                        placeholder="City"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="zipCode">ZIP Code</Label>
+                      <Input 
+                        id="zipCode" 
+                        value={shippingInfo.zipCode}
+                        onChange={(e) => setShippingInfo({...shippingInfo, zipCode: e.target.value})}
+                        placeholder="ZIP code"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="md:col-span-2">
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input 
+                        id="phone" 
+                        type="tel" 
+                        value={shippingInfo.phone}
+                        onChange={(e) => setShippingInfo({...shippingInfo, phone: e.target.value})}
+                        placeholder="Phone number for delivery updates"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <Separator className="my-6" />
+                  
+                  <h3 className="text-lg font-medium mb-4">Shipping Method</h3>                  
+                  <RadioGroup 
+                    value={shippingMethod}
+                    onValueChange={setShippingMethod}
+                    className="space-y-3 mb-6"
+                  >
+                    <div className="flex items-center justify-between border p-4 rounded-md">
                       <div className="flex items-center space-x-2">
-                        <Checkbox 
-                          id="updates" 
-                          checked={saveInfo}
-                          onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
-                        />
-                        <Label htmlFor="updates" className="text-sm">
-                          Email me with news and offers
-                        </Label>
+                        <RadioGroupItem value="standard" id="standard" />
+                        <Label htmlFor="standard" className="font-medium">Standard Shipping</Label>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">$8.00</p>
+                        <p className="text-sm text-muted-foreground">3-5 business days</p>
                       </div>
                     </div>
                     
-                    <Separator className="my-6" />
-                    
-                    <div className="flex items-center mb-6">
-                      <MapPin className="mr-2 h-5 w-5" />
-                      <h2 className="text-xl font-serif">Shipping Address</h2>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="firstName">First Name</Label>
-                        <Input 
-                          id="firstName" 
-                          value={shippingInfo.firstName}
-                          onChange={(e) => setShippingInfo({...shippingInfo, firstName: e.target.value})}
-                          placeholder="First name"
-                          className="mt-1"
-                        />
+                    <div className="flex items-center justify-between border p-4 rounded-md">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="express" id="express" />
+                        <Label htmlFor="express" className="font-medium">Express Shipping</Label>
                       </div>
-                      
-                      <div>
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input 
-                          id="lastName" 
-                          value={shippingInfo.lastName}
-                          onChange={(e) => setShippingInfo({...shippingInfo, lastName: e.target.value})}
-                          placeholder="Last name"
-                          className="mt-1"
-                        />
-                      </div>
-                      
-                      <div className="md:col-span-2">
-                        <Label htmlFor="address">Address</Label>
-                        <Input 
-                          id="address" 
-                          value={shippingInfo.address}
-                          onChange={(e) => setShippingInfo({...shippingInfo, address: e.target.value})}
-                          placeholder="Street address"
-                          className="mt-1"
-                        />
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="city">City</Label>
-                        <Input 
-                          id="city" 
-                          value={shippingInfo.city}
-                          onChange={(e) => setShippingInfo({...shippingInfo, city: e.target.value})}
-                          placeholder="City"
-                          className="mt-1"
-                        />
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="zipCode">ZIP Code</Label>
-                        <Input 
-                          id="zipCode" 
-                          value={shippingInfo.zipCode}
-                          onChange={(e) => setShippingInfo({...shippingInfo, zipCode: e.target.value})}
-                          placeholder="ZIP code"
-                          className="mt-1"
-                        />
-                      </div>
-                      
-                      <div className="md:col-span-2">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input 
-                          id="phone" 
-                          type="tel" 
-                          value={shippingInfo.phone}
-                          onChange={(e) => setShippingInfo({...shippingInfo, phone: e.target.value})}
-                          placeholder="Phone number for delivery updates"
-                          className="mt-1"
-                        />
+                      <div className="text-right">
+                        <p className="font-medium">$15.00</p>
+                        <p className="text-sm text-muted-foreground">1-2 business days</p>
                       </div>
                     </div>
-                    
-                    <div className="mt-8 flex justify-end">
-                      <Button onClick={handleNextStep} className="btn-vintage">
-                        Continue to Shipping <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Step 2: Shipping */}
-                {currentStep === 2 && (
-                  <div>
-                    <div className="flex items-center mb-6">
-                      <ShoppingBag className="mr-2 h-5 w-5" />
-                      <h2 className="text-xl font-serif">Shipping Method</h2>
-                    </div>
-                    
-                    <RadioGroup 
-                      value={shippingMethod}
-                      onValueChange={setShippingMethod}
-                      className="space-y-3"
-                    >
-                      <div className="flex items-center justify-between border p-4 rounded-md">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="standard" id="standard" />
-                          <Label htmlFor="standard" className="font-medium">Standard Shipping</Label>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium">$8.00</p>
-                          <p className="text-sm text-muted-foreground">3-5 business days</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between border p-4 rounded-md">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="express" id="express" />
-                          <Label htmlFor="express" className="font-medium">Express Shipping</Label>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium">$15.00</p>
-                          <p className="text-sm text-muted-foreground">1-2 business days</p>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                    
-                    <div className="mt-8 flex justify-between">
-                      <Button variant="outline" onClick={handlePreviousStep}>
-                        <ChevronLeft className="mr-1 h-4 w-4" /> Back
-                      </Button>
-                      <Button onClick={handleNextStep} className="btn-vintage">
-                        Continue to Payment <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Step 3: Payment */}
-                {currentStep === 3 && (
-                  <div>
-                    <div className="flex items-center mb-6">
+                  </RadioGroup>
+                  
+                  <Separator className="my-6" />
+                  
+                  <h3 className="text-lg font-medium mb-4">Payment</h3>
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center border p-4 rounded-md">
                       <CreditCard className="mr-2 h-5 w-5" />
-                      <h2 className="text-xl font-serif">Payment</h2>
+                      <span className="font-medium">Credit Card</span>
                     </div>
                     
-                    <RadioGroup 
-                      value={paymentMethod}
-                      onValueChange={setPaymentMethod}
-                      className="space-y-3 mb-6"
-                    >
-                      <div className="flex items-center border p-4 rounded-md">
-                        <RadioGroupItem value="card" id="card" />
-                        <Label htmlFor="card" className="ml-2 font-medium">Credit Card</Label>
-                        <div className="ml-auto flex space-x-2">
-                          <div className="w-10 h-6 bg-muted rounded"></div>
-                          <div className="w-10 h-6 bg-muted rounded"></div>
-                          <div className="w-10 h-6 bg-muted rounded"></div>
-                        </div>
+                    <div>
+                      <Label htmlFor="cardName">Name on card</Label>
+                      <Input 
+                        id="cardName" 
+                        placeholder="Name as it appears on your card"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="cardNumber">Card number</Label>
+                      <Input 
+                        id="cardNumber" 
+                        placeholder="•••• •••• •••• ••••"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="expiry">Expiration date</Label>
+                        <Input 
+                          id="expiry" 
+                          placeholder="MM / YY"
+                          className="mt-1"
+                          required
+                        />
                       </div>
                       
-                      <div className="flex items-center border p-4 rounded-md">
-                        <RadioGroupItem value="paypal" id="paypal" />
-                        <Label htmlFor="paypal" className="ml-2 font-medium">PayPal</Label>
-                        <div className="ml-auto w-16 h-6 bg-muted rounded"></div>
+                      <div>
+                        <Label htmlFor="cvc">CVC</Label>
+                        <Input 
+                          id="cvc" 
+                          placeholder="•••"
+                          className="mt-1"
+                          required
+                        />
                       </div>
-                    </RadioGroup>
+                    </div>
                     
-                    {paymentMethod === "card" && (
-                      <div className="space-y-4">
-                        <div>
-                          <Label htmlFor="cardName">Name on card</Label>
-                          <Input 
-                            id="cardName" 
-                            placeholder="Name as it appears on your card"
-                            className="mt-1"
-                          />
-                        </div>
-                        
-                        <div>
-                          <Label htmlFor="cardNumber">Card number</Label>
-                          <Input 
-                            id="cardNumber" 
-                            placeholder="•••• •••• •••• ••••"
-                            className="mt-1"
-                          />
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label htmlFor="expiry">Expiration date</Label>
-                            <Input 
-                              id="expiry" 
-                              placeholder="MM / YY"
-                              className="mt-1"
-                            />
-                          </div>
-                          
-                          <div>
-                            <Label htmlFor="cvc">CVC</Label>
-                            <Input 
-                              id="cvc" 
-                              placeholder="•••"
-                              className="mt-1"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className="mt-8 flex justify-between">
-                      <Button variant="outline" onClick={handlePreviousStep}>
-                        <ChevronLeft className="mr-1 h-4 w-4" /> Back
-                      </Button>
-                      <Button onClick={handleSubmit} className="btn-vintage">
-                        Complete Order
-                      </Button>
+                    <div className="flex items-center space-x-2 mt-4">
+                      <Checkbox 
+                        id="saveInfo" 
+                        checked={saveInfo}
+                        onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
+                      />
+                      <Label htmlFor="saveInfo" className="text-sm">
+                        Save this information for next time
+                      </Label>
                     </div>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </form>
           </div>
           
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <Card className="border-muted sticky top-8">
               <CardContent className="p-6">
-                <h2 className="text-xl font-serif mb-4">Order Summary</h2>
+                <h3 className="text-lg font-medium mb-4">Order Summary</h3>
                 
                 <div className="space-y-4 max-h-80 overflow-auto mb-4">
                   {cartItems.map((item) => (
@@ -395,6 +315,28 @@ const CheckoutPage: React.FC = () => {
                   ))}
                 </div>
                 
+                <div className="mt-4 mb-4">
+                  <div className="flex">
+                    <Input
+                      placeholder="Discount code"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                      className="rounded-r-none"
+                    />
+                    <Button 
+                      type="button" 
+                      onClick={handleApplyDiscount}
+                      className="rounded-l-none"
+                      variant="outline"
+                    >
+                      Apply
+                    </Button>
+                  </div>
+                  {discountApplied && (
+                    <p className="text-sm text-green-600 mt-1">Discount applied!</p>
+                  )}
+                </div>
+                
                 <Separator className="my-4" />
                 
                 <div className="space-y-2">
@@ -402,6 +344,12 @@ const CheckoutPage: React.FC = () => {
                     <span>Subtotal</span>
                     <span>${formatPrice(subtotal)}</span>
                   </div>
+                  {discountApplied && (
+                    <div className="flex justify-between text-green-600">
+                      <span>Discount</span>
+                      <span>-${formatPrice(discount)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span>Shipping</span>
                     <span>${formatPrice(shipping)}</span>
@@ -414,9 +362,23 @@ const CheckoutPage: React.FC = () => {
                 
                 <Separator className="my-4" />
                 
-                <div className="flex justify-between font-medium text-lg">
+                <div className="flex justify-between font-medium text-lg mb-6">
                   <span>Total</span>
                   <span>${formatPrice(total)}</span>
+                </div>
+                
+                <Button 
+                  type="submit"
+                  className="w-full btn-vintage"
+                  onClick={handleSubmit}
+                >
+                  Complete Order
+                </Button>
+                
+                <div className="mt-4 text-center">
+                  <Link to="/cart" className="text-sm text-muted-foreground flex items-center justify-center">
+                    <ChevronLeft className="h-4 w-4 mr-1" /> Return to cart
+                  </Link>
                 </div>
               </CardContent>
             </Card>
