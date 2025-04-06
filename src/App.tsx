@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import LoadingScreen from "./components/LoadingScreen";
 import AboutPage from "./pages/AboutPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import CartPage from "./pages/CartPage";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/shop" element={<ShopCatalog />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/shop/men" element={<ShopCatalog />} />
           <Route path="/shop/women" element={<ShopCatalog />} />
           <Route path="/product/:id" element={<ProductDetails />} />

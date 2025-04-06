@@ -135,6 +135,7 @@ const Navbar = () => {
             <Link to="/shop" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Shop All</Link>
             <Link to="/new-arrivals" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>New Arrivals</Link>
             <Link to="/sale" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Sale</Link>
+            <Link to="/cart" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Cart</Link>
           </nav>
         </div>
       )}
