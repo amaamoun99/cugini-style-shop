@@ -27,7 +27,7 @@ const products = [
       '/images/DSC00402.jpg',
     ],
     colors: ['Black', 'Navy', 'Gray'],
-    sizes: ['S', 'M', 'L', 'XL'],
+    sizes: ['S', 'M', 'L'],
     description: 'Crafted from premium Italian wool, this blazer embodies timeless elegance with a modern silhouette. Perfect for both formal occasions and elevated casual wear.',
     details: [
       'Made in Italy from 100% virgin wool',
@@ -216,7 +216,7 @@ const ProductDetails = () => {
               </p>
               
               {/* Color Selection */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <h3 className="font-medium text-cugini-dark mb-2">Color: <span className="font-normal">{selectedColor}</span></h3>
                 <div className="flex space-x-3">
                   {product.colors.map(color => (
@@ -256,7 +256,7 @@ const ProductDetails = () => {
                     />
                   ))}
                 </div>
-              </div>
+              </div> */}
               
               {/* Size Selection */}
               <div className="mb-6">
