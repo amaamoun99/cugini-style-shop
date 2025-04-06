@@ -25,8 +25,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/shop" element={<ShopCatalog />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          {/* <Route path="/shop/men" element={<ShopCatalog />} /> */}
-          {/* <Route path="/shop/women" element={<ShopCatalog />} /> */}
+          <Route path="/shop/men" element={<ShopCatalog />} />
+          <Route path="/shop/women" element={<ShopCatalog />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/about" element={<AboutPage />} />
           {/* Add other routes here */}

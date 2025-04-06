@@ -370,7 +370,7 @@ const ProductDetails = () => {
         <div className="bg-gray-50 py-12">
           <div className="container-custom">
             <Tabs defaultValue="description" className="w-full">
-              <TabsList className="flex justify-center mb-8 border-b border-gray-200 overflow-auto pb-2 bg-transparent">
+              <TabsList className="flex justify-center mb-8 border-b border-gray-200 overflow-hidden pb-2 bg-transparent">
                 <TabsTrigger 
                   value="description"
                   className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
@@ -383,12 +383,12 @@ const ProductDetails = () => {
                 >
                   Care Instructions
                 </TabsTrigger>
-                <TabsTrigger 
+                {/* <TabsTrigger 
                   value="reviews"
                   className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
                 >
                   Reviews
-                </TabsTrigger>
+                </TabsTrigger> */}
               </TabsList>
               
               <TabsContent value="description" className="mt-0">
