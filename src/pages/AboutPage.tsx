@@ -44,9 +44,9 @@ const AboutPage = () => {
                 <div className="h-px w-12 bg-cugini-golden"></div>
               </div>
               
-              <p className="text-white/90 text-lg md:text-xl italic font-serif max-w-xl mx-auto px-4">
+              {/* <p className="text-white/90 text-lg md:text-xl italic font-serif max-w-xl mx-auto px-4">
                 Where tradition meets timeless style
-              </p>
+              </p> */}
             </div>
           </div>
         </section>
@@ -112,7 +112,8 @@ const AboutPage = () => {
                     alt="Italian craftsmanship" 
                     className="w-full h-[500px] object-cover shadow-lg"
                   />
-                  <div className="absolute -bottom-6 -right-6 border-2 border-cugini-golden w-40 h-40 hidden md:block"></div>
+                  {/*Decorative square*/}
+                  {/* <div className="absolute -bottom-6 -right-6 border-2 border-cugini-golden w-40 h-40 hidden md:block"></div> */}
                 </div>
               </motion.div>
               <motion.div 
@@ -180,7 +181,7 @@ const AboutPage = () => {
                 {/* Signature-like ending */}
                 <div className="relative">
                   <img 
-                    src="/images/DSC00400.jpg" 
+                    src="/images/michael.jpg" 
                     alt="CUGINI signature" 
                     className="w-full max-w-[200px] object-cover" 
                   />
@@ -199,17 +200,17 @@ const AboutPage = () => {
                     <img 
                       src="/images/DSC00479.jpg" 
                       alt="CUGINI craftsmanship" 
-                      className="w-full h-[180px] object-cover shadow-md"
+                      className="w-full h-[259px] object-cover shadow-md"
                     />
                     <img 
-                      src="/images/DSC00480.jpg" 
+                      src="/images/IMG-20250403-WA0008.jpg" 
                       alt="CUGINI heritage" 
                       className="w-full h-[240px] object-cover shadow-md"
                     />
                   </div>
                   <div>
                     <img 
-                      src="/images/DSC00409.jpg" 
+                      src="/images/IMG-20250403-WA0020.jpg" 
                       alt="CUGINI legacy" 
                       className="w-full h-full object-cover shadow-md"
                     />

@@ -24,7 +24,7 @@ const DiscoverCollection = () => {
                         <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-4">Tailored pants Collection</h1>
                         <p className="text-white/90 text-lg mb-8">TAILORED FORTHETIMELESS.</p>
                         <div className="flex flex-wrap gap-4">
-                            <Link to="/collection" className="btn-vintage">Discover collection</Link>
+                            <Link to="/shop" className="btn-vintage">Discover collection</Link>
                         </div>
                     </div>
                 </div>

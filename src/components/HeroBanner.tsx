@@ -24,8 +24,8 @@ const HeroBanner = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-4">Discover Timeless Italian Elegance</h1>
             <p className="text-white/90 text-lg mb-8">Crafted with passion and steeped in heritage</p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/men" className="btn-vintage">Shop Men's Collection</Link>
-              <Link to="/women" className="btn-vintage-outline">Shop Women's Collection</Link>
+              <Link to="/shop/men" className="btn-vintage">Shop Men's Collection</Link>
+              <Link to="/shop/women" className="btn-vintage-outline">Shop Women's Collection</Link>
             </div>
           </div>
         </div>

@@ -45,8 +45,9 @@ const Navbar = () => {
             {/* <Link to="/shop/men" className="nav-link">Men</Link>
             <Link to="/shop/women" className="nav-link">Women</Link> */}
             <Link to="/shop" className="nav-link">Shop Catalog</Link>
-            <Link to="/new-arrivals" className="nav-link">New Arrivals</Link>
-            <Link to="/sale" className="nav-link">Sale</Link>
+            <Link to="/about" className="nav-link">Our Story</Link>
+            {/* <Link to="/new-arrivals" className="nav-link">New Arrivals</Link>
+            <Link to="/sale" className="nav-link">Sale</Link> */}
           </nav>
 
           {/* Right Icons */}

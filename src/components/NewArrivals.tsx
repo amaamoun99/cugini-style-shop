@@ -53,7 +53,7 @@ const NewArrivals = () => {
         
         <div className="relative">
           {/* Decorative element inspired by the Ralph Lauren design */}
-          <div className="hidden md:block absolute -top-10 -right-4 w-48 h-48 border border-cugini-golden opacity-30 -rotate-12"></div>
+          {/* <div className="hidden md:block absolute -top-10 -right-4 w-48 h-48 border border-cugini-golden opacity-30 -rotate-12"></div> */}
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 relative z-10">
             {products.map((product) => (
