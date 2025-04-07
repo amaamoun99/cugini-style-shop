@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SizeChart from '@/components/SizeChart';
 import { ArrowRight, Minus, Plus, Star, ShoppingBag, Share2, ZoomIn, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/hooks/use-toast";
@@ -309,7 +310,7 @@ const ProductDetails = () => {
                   ))}
                 </div>
                 <p className="text-sm text-gray-500 mt-2">
-                  <a href="/size-guide" className="underline hover:text-cugini-golden">Size Guide</a>
+                  <SizeChart category={product.category} />
                 </p>
               </div>
               
@@ -383,12 +384,12 @@ const ProductDetails = () => {
                 >
                   Care Instructions
                 </TabsTrigger>
-                {/* <TabsTrigger 
-                  value="reviews"
+                <TabsTrigger 
+                  value="sizing"
                   className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
                 >
-                  Reviews
-                </TabsTrigger> */}
+                  Size Guide
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="description" className="mt-0">
@@ -409,55 +410,11 @@ const ProductDetails = () => {
                 </div>
               </TabsContent>
               
-              <TabsContent value="reviews" className="mt-0">
+              <TabsContent value="sizing" className="mt-0">
                 <div className="max-w-3xl mx-auto">
-                  <div className="flex items-center mb-6">
-                    <div className="flex items-center text-yellow-500">
-                      <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
-                      <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
-                      <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
-                      <Star className="text-yellow-500 h-5 w-5 fill-yellow-500" />
-                      <Star className="text-gray-300 h-5 w-5" />
-                    </div>
-                    <span className="text-gray-600 ml-2">4.0 out of 5</span>
-                  </div>
-                  
-                  <Button 
-                    className="bg-cugini-dark hover:bg-cugini-golden text-white transition-colors mb-8"
-                  >
-                    Write a Review
-                  </Button>
-                  
-                  <div className="space-y-6">
-                    <div className="border-b border-gray-200 pb-6">
-                      <div className="flex items-center mb-2">
-                        <div className="flex items-center text-yellow-500">
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                        </div>
-                        <p className="text-sm font-medium ml-2">Excellent quality</p>
-                      </div>
-                      <p className="text-gray-600 mb-1">The quality and fit exceed my expectations. Worth every penny.</p>
-                      <p className="text-gray-400 text-sm">Marco B. - Verified Buyer</p>
-                    </div>
-                    
-                    <div className="border-b border-gray-200 pb-6">
-                      <div className="flex items-center mb-2">
-                        <div className="flex items-center text-yellow-500">
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4 fill-yellow-500" />
-                          <Star className="h-4 w-4" />
-                          <Star className="h-4 w-4" />
-                        </div>
-                        <p className="text-sm font-medium ml-2">Good but sizing runs small</p>
-                      </div>
-                      <p className="text-gray-600 mb-1">Beautiful piece but I recommend sizing up. The material is high quality.</p>
-                      <p className="text-gray-400 text-sm">Sofia L. - Verified Buyer</p>
-                    </div>
+                  <h2 className="text-2xl font-serif text-cugini-dark mb-4">Size Guide</h2>
+                  <div className="bg-white border border-gray-200 rounded-md p-6">
+                    <SizeChart category={product.category} />
                   </div>
                 </div>
               </TabsContent>
