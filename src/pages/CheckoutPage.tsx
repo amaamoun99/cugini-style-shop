@@ -107,6 +107,18 @@ const CheckoutPage: React.FC = () => {
                         required
                       />
                     </div>
+                    <div className="md:col-span-2">
+                      <Label htmlFor="phone">Phone</Label>
+                      <Input 
+                        id="phone" 
+                        type="tel" 
+                        value={shippingInfo.phone}
+                        onChange={(e) => setShippingInfo({...shippingInfo, phone: e.target.value})}
+                        placeholder="Phone number for delivery updates"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
                   </div>
                   
                   <Separator className="my-6" />
@@ -173,24 +185,13 @@ const CheckoutPage: React.FC = () => {
                       />
                     </div>
                     
-                    <div className="md:col-span-2">
-                      <Label htmlFor="phone">Phone</Label>
-                      <Input 
-                        id="phone" 
-                        type="tel" 
-                        value={shippingInfo.phone}
-                        onChange={(e) => setShippingInfo({...shippingInfo, phone: e.target.value})}
-                        placeholder="Phone number for delivery updates"
-                        className="mt-1"
-                        required
-                      />
-                    </div>
+
                   </div>
                   
-                  <Separator className="my-6" />
+                  {/* <Separator className="my-6" /> */}
                   
-                  <h3 className="text-lg font-medium mb-4">Shipping Method</h3>                  
-                  <RadioGroup 
+                  {/* <h3 className="text-lg font-medium mb-4">Shipping Method</h3>                   */}
+                  {/* <RadioGroup 
                     value={shippingMethod}
                     onValueChange={setShippingMethod}
                     className="space-y-3 mb-6"
@@ -216,7 +217,7 @@ const CheckoutPage: React.FC = () => {
                         <p className="text-sm text-muted-foreground">1-2 business days</p>
                       </div>
                     </div>
-                  </RadioGroup>
+                  </RadioGroup> */}
                   
                   <Separator className="my-6" />
                   
