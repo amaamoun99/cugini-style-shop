@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -8,9 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
-import { ChevronLeft, CreditCard } from "lucide-react";
+import { ChevronLeft, CreditCard, Truck } from "lucide-react";
 
-// Mock data for the cart items
 const cartItems = [
   {
     id: 1,
@@ -49,11 +47,10 @@ const CheckoutPage: React.FC = () => {
   const [discountCode, setDiscountCode] = useState<string>("");
   const [discountApplied, setDiscountApplied] = useState<boolean>(false);
   
-  // Calculate order summary
   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   const shipping = shippingMethod === "express" ? 15 : 8;
-  const discount = discountApplied ? subtotal * 0.1 : 0; // 10% discount if applied
-  const tax = (subtotal - discount) * 0.08; // 8% tax after discount
+  const discount = discountApplied ? subtotal * 0.1 : 0;
+  const tax = (subtotal - discount) * 0.08;
   const total = subtotal + shipping + tax - discount;
   
   const formatPrice = (price: number) => {
@@ -70,8 +67,11 @@ const CheckoutPage: React.FC = () => {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Process payment and order logic would go here
     alert("Order submitted! This would be connected to your payment processor in a real implementation.");
+  };
+  
+  const getButtonText = () => {
+    return paymentMethod === "card" ? "Complete Order" : "Order Now";
   };
   
   return (
@@ -88,7 +88,6 @@ const CheckoutPage: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Checkout Form */}
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit}>
               <Card className="border-muted mb-6">
@@ -220,72 +219,94 @@ const CheckoutPage: React.FC = () => {
                   
                   <Separator className="my-6" />
                   
-                  <h3 className="text-lg font-medium mb-4">Payment</h3>
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-center border p-4 rounded-md">
-                      <CreditCard className="mr-2 h-5 w-5" />
-                      <span className="font-medium">Credit Card</span>
+                  <h3 className="text-lg font-medium mb-4">Payment Method</h3>
+                  <RadioGroup 
+                    value={paymentMethod}
+                    onValueChange={setPaymentMethod}
+                    className="space-y-3 mb-6"
+                  >
+                    <div className="flex items-center justify-between border p-4 rounded-md">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="card" id="card" />
+                        <Label htmlFor="card" className="font-medium flex items-center">
+                          <CreditCard className="mr-2 h-5 w-5" />
+                          Credit Card
+                        </Label>
+                      </div>
                     </div>
                     
-                    <div>
-                      <Label htmlFor="cardName">Name on card</Label>
-                      <Input 
-                        id="cardName" 
-                        placeholder="Name as it appears on your card"
-                        className="mt-1"
-                        required
-                      />
+                    <div className="flex items-center justify-between border p-4 rounded-md">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="cod" id="cod" />
+                        <Label htmlFor="cod" className="font-medium flex items-center">
+                          <Truck className="mr-2 h-5 w-5" />
+                          Payment on Delivery
+                        </Label>
+                      </div>
                     </div>
-                    
-                    <div>
-                      <Label htmlFor="cardNumber">Card number</Label>
-                      <Input 
-                        id="cardNumber" 
-                        placeholder="•••• •••• •••• ••••"
-                        className="mt-1"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-4">
+                  </RadioGroup>
+                  
+                  {paymentMethod === "card" && (
+                    <div className="space-y-4 mb-6">
                       <div>
-                        <Label htmlFor="expiry">Expiration date</Label>
+                        <Label htmlFor="cardName">Name on card</Label>
                         <Input 
-                          id="expiry" 
-                          placeholder="MM / YY"
+                          id="cardName" 
+                          placeholder="Name as it appears on your card"
                           className="mt-1"
-                          required
+                          required={paymentMethod === "card"}
                         />
                       </div>
                       
                       <div>
-                        <Label htmlFor="cvc">CVC</Label>
+                        <Label htmlFor="cardNumber">Card number</Label>
                         <Input 
-                          id="cvc" 
-                          placeholder="•••"
+                          id="cardNumber" 
+                          placeholder="•••• •••• •••• ••••"
                           className="mt-1"
-                          required
+                          required={paymentMethod === "card"}
                         />
                       </div>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="expiry">Expiration date</Label>
+                          <Input 
+                            id="expiry" 
+                            placeholder="MM / YY"
+                            className="mt-1"
+                            required={paymentMethod === "card"}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="cvc">CVC</Label>
+                          <Input 
+                            id="cvc" 
+                            placeholder="•••"
+                            className="mt-1"
+                            required={paymentMethod === "card"}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2 mt-4">
+                        <Checkbox 
+                          id="saveInfo" 
+                          checked={saveInfo}
+                          onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
+                        />
+                        <Label htmlFor="saveInfo" className="text-sm">
+                          Save this information for next time
+                        </Label>
+                      </div>
                     </div>
-                    
-                    <div className="flex items-center space-x-2 mt-4">
-                      <Checkbox 
-                        id="saveInfo" 
-                        checked={saveInfo}
-                        onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
-                      />
-                      <Label htmlFor="saveInfo" className="text-sm">
-                        Save this information for next time
-                      </Label>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </form>
           </div>
           
-          {/* Order Summary */}
           <div className="lg:col-span-1">
             <Card className="border-muted sticky top-8">
               <CardContent className="p-6">
@@ -372,7 +393,7 @@ const CheckoutPage: React.FC = () => {
                   className="w-full btn-vintage"
                   onClick={handleSubmit}
                 >
-                  Complete Order
+                  {getButtonText()}
                 </Button>
                 
                 <div className="mt-4 text-center">
