@@ -1,6 +1,6 @@
+
 import React from 'react';
-import ProductCard from './ProductCard';
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import BestSellerCard from './BestSellerCard';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
@@ -52,15 +52,13 @@ const BestSellers = () => {
           <div className="flex">
             {products.map((product) => (
               <div key={product.id} className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-3">
-                <div className="bg-white p-2">
-                  <ProductCard
-                    id={product.id}
-                    name={product.name}
-                    price={product.price}
-                    image={product.image}
-                    category={product.category}
-                  />
-                </div>
+                <BestSellerCard
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image}
+                  category={product.category}
+                />
               </div>
             ))}
           </div>
