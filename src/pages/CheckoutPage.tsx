@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -67,11 +68,18 @@ const CheckoutPage: React.FC = () => {
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert("Order submitted! This would be connected to your payment processor in a real implementation.");
+    
+    if (paymentMethod === "card") {
+      // Here you would redirect to your payment gateway (e.g., Stripe)
+      alert("Redirecting to payment gateway...");
+    } else {
+      // Process cash on delivery order
+      alert("Order submitted! This would process a payment on delivery order in a real implementation.");
+    }
   };
   
   const getButtonText = () => {
-    return paymentMethod === "card" ? "Complete Order" : "Order Now";
+    return paymentMethod === "card" ? "Proceed to Payment" : "Complete Order";
   };
   
   return (
@@ -230,9 +238,10 @@ const CheckoutPage: React.FC = () => {
                         <RadioGroupItem value="card" id="card" />
                         <Label htmlFor="card" className="font-medium flex items-center">
                           <CreditCard className="mr-2 h-5 w-5" />
-                          Credit Card
+                          Pay with Credit Card
                         </Label>
                       </div>
+                      <p className="text-sm text-muted-foreground">Redirects to payment gateway</p>
                     </div>
                     
                     <div className="flex items-center justify-between border p-4 rounded-md">
@@ -246,62 +255,16 @@ const CheckoutPage: React.FC = () => {
                     </div>
                   </RadioGroup>
                   
-                  {paymentMethod === "card" && (
-                    <div className="space-y-4 mb-6">
-                      <div>
-                        <Label htmlFor="cardName">Name on card</Label>
-                        <Input 
-                          id="cardName" 
-                          placeholder="Name as it appears on your card"
-                          className="mt-1"
-                          required={paymentMethod === "card"}
-                        />
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="cardNumber">Card number</Label>
-                        <Input 
-                          id="cardNumber" 
-                          placeholder="•••• •••• •••• ••••"
-                          className="mt-1"
-                          required={paymentMethod === "card"}
-                        />
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="expiry">Expiration date</Label>
-                          <Input 
-                            id="expiry" 
-                            placeholder="MM / YY"
-                            className="mt-1"
-                            required={paymentMethod === "card"}
-                          />
-                        </div>
-                        
-                        <div>
-                          <Label htmlFor="cvc">CVC</Label>
-                          <Input 
-                            id="cvc" 
-                            placeholder="•••"
-                            className="mt-1"
-                            required={paymentMethod === "card"}
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2 mt-4">
-                        <Checkbox 
-                          id="saveInfo" 
-                          checked={saveInfo}
-                          onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
-                        />
-                        <Label htmlFor="saveInfo" className="text-sm">
-                          Save this information for next time
-                        </Label>
-                      </div>
-                    </div>
-                  )}
+                  <div className="flex items-center space-x-2 mt-4">
+                    <Checkbox 
+                      id="saveInfo" 
+                      checked={saveInfo}
+                      onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
+                    />
+                    <Label htmlFor="saveInfo" className="text-sm">
+                      Save this information for next time
+                    </Label>
+                  </div>
                 </CardContent>
               </Card>
             </form>
