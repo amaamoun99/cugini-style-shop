@@ -12,11 +12,13 @@ import LoadingScreen from "./components/LoadingScreen";
 import AboutPage from "./pages/AboutPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import CartPage from "./pages/CartPage";
+import { SpeedInsights  } from "@vercel/speed-insights/react"
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <SpeedInsights />
     <TooltipProvider>
       <Toaster />
       <Sonner position="top-right" />
