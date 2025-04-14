@@ -6,5 +6,5 @@ const isAdmin = (req, res, next) => {
     next();
   };
   
-  module.exports = isAdmin;
+  module.exports = {isAdmin};
   

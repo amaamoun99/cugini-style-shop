@@ -10,6 +10,7 @@ const orderRouter = require("./routes/orderRoutes") // Import Prisma client
 const cartRouter = require("./routes/cartRoutes")
 const checkoutRouter = require("./routes/checkoutRoutes")
 const authRouter = require("./routes/authRoutes") // Import Prisma client
+const userRouter = require("./routes/userRoutes") // Import Prisma client
 // Initialize express app
 const app = express();
 const prisma = new PrismaClient(); // Initialize Prisma client
@@ -41,9 +42,8 @@ app.use("/api/v1/products",productRouter); // Pass Prisma client to the router
 app.use("/api/v1/collections",collectionRouter); // Pass Prisma client to the router
 app.use("/api/v1/cart", cartRouter); // Pass Prisma client to the router   
 app.use("/api/v1/checkout",checkoutRouter); // Pass Prisma client to the router     
-//app.use("/api/v1/order",orderRouter); // Pass Prisma client to the router
-
-//   app.use("/api/v1/users", userRouter);
+app.use("/api/v1/orders",orderRouter); // Pass Prisma client to the router
+app.use("/api/v1/users", userRouter);
 //   app.use("/api/v1/requestService", requestRouter);
 
 module.exports = app;

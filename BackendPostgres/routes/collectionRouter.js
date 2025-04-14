@@ -1,20 +1,15 @@
-const express = require("express");
-const collectionController = require("../controllers/collectionController");
-// const multer = require('multer');
+const express = require('express');
 const router = express.Router();
+const { authenticate} = require('../middlewares/authenticate');
+const { isAdmin } = require('../middlewares/isAdmin');
+const controller = require('../controllers/collectionController');
 
-// Routes
-router
-  .route("/")
-  .get(collectionController.getAllCollections) // GET /api/Collections
-  .post(collectionController.createCollection); // POST /api/Collections
+router.use(authenticate, isAdmin);
 
-router.get("/search", collectionController.searchCollection); // GET /api/Collections/search
-
-router
-  .route("/:id")
-  .get(collectionController.getCollectionById) // GET /api/Collections/:id
-  .patch(collectionController.updateCollectionById) // PATCH /api/Collections/:id
-  .delete(collectionController.deleteCollectionById); // DELETE /api/Collections/:id
+router.post('/', controller.createCollection);
+router.get('/', controller.getAllCollections);
+router.get('/:id', controller.getCollectionById);
+router.put('/:id', controller.updateCollection);
+router.delete('/:id', controller.deleteCollection);
 
 module.exports = router;
