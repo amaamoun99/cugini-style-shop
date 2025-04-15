@@ -1,21 +1,19 @@
-// api/routes/orders.routes.js
 const express = require("express");
 const router = express.Router();
 const orderController = require("../controllers/orderController");
 const { authenticate } = require("../middlewares/authenticate");
 const { isAdmin } = require("../middlewares/isAdmin");
 
-router.get("/", authenticate, orderController.getUserOrders);
-router.get("/:id", authenticate, orderController.getOrderDetails);
-router.get("/:id/status", authenticate, orderController.getOrderStatus);
+router.use(authenticate);
 
-//////////////////////////////////////////////////////////////////
-//////////////////admin routes////////////////////
-router.use(authenticate, isAdmin);
+// ADMIN ROUTES — must come first
+router.get('/admin', isAdmin, orderController.getAllOrders);
+router.get('/admin/:id', isAdmin, orderController.getOrderById);
+router.put('/admin/:id', isAdmin, orderController.updateOrderStatus);
+router.delete('/admin/:id', isAdmin, orderController.deleteOrder);
 
-router.get('/admin', orderController.getAllOrders);
-router.get('/admin/:id', orderController.getOrderById);
-router.put('/admin/:id', orderController.updateOrderStatus);
-router.delete('/admin/:id', orderController.deleteOrder);
+// USER ROUTES
+router.get('/:id/status', orderController.getOrderStatus);
+router.get('/:id', orderController.getOrderDetails);
 
 module.exports = router;

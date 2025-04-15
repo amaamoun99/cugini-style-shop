@@ -1,15 +1,9 @@
 // api/controllers/orders.controller.js
 const orderService = require("../services/orderServices");
+const { PrismaClient } = require("../generated/prisma");
+const prisma = new PrismaClient();
+const { v4: uuidv4 } = require("uuid");
 
-exports.getUserOrders = async function (req, res) {
-  try {
-    const orders = await orderService.getUserOrders(req.user.id);
-    res.json({ status: "success", data: orders });
-  } catch (err) {
-    console.error("Fetch Orders Error:", err);
-    res.status(500).json({ status: "fail", message: "Could not fetch orders" });
-  }
-};
 
 exports.getOrderDetails = async function (req, res) {
   const { id } = req.params;
@@ -50,9 +44,9 @@ exports.getOrderStatus = async function (req, res) {
 ///////////////////////////////////////////////////////////////////////
 //////////////////admin controllers///////////////////////
 exports.getAllOrders = async (req, res) => {
-  cosole.log("Fetching all orders...");
+  console.log("Fetching all orders...");
   try {
-    const orders = await prisma.order.findMany({
+    const orders = await prisma.Order.findMany({
       include: {
         user: true,
         orderItems: {

@@ -140,6 +140,10 @@ exports.Prisma.AddressScalarFieldEnum = {
 exports.Prisma.CollectionScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   slug: 'slug'
 };
 

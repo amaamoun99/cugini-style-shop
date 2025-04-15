@@ -1,3 +1,4 @@
+const orderService = require('../services/orderServices');
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
@@ -53,5 +54,15 @@ exports.deleteUser = async (req, res) => {
     res.json({ status: 'success', message: 'User deleted' });
   } catch (err) {
     res.status(500).json({ status: 'fail', message: err.message });
+  }
+};
+
+exports.getUserOrders = async function (req, res) {
+  try {
+    const orders = await orderService.getUserOrders(req.user.id);
+    res.json({ status: "success", data: orders });
+  } catch (err) {
+    console.error("Fetch Orders Error:", err);
+    res.status(500).json({ status: "fail", message: "Could not fetch orders" });
   }
 };

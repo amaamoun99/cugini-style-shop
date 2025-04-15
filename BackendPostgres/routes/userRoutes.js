@@ -4,7 +4,11 @@ const {authenticate} = require('../middlewares/authenticate');
 const {isAdmin} = require('../middlewares/isAdmin');
 const userController = require('../controllers/userController');
 
+
+router.get("/orders", authenticate,userController.getUserOrders);
+
 router.use(authenticate, isAdmin);
+
 
 router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUserById);

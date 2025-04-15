@@ -9,7 +9,7 @@ router.use(authenticate, isAdmin);
 router.post('/', controller.createCollection);
 router.get('/', controller.getAllCollections);
 router.get('/:id', controller.getCollectionById);
-router.put('/:id', controller.updateCollection);
+router.patch('/:id', controller.updateCollection);
 router.delete('/:id', controller.deleteCollection);
 
 module.exports = router;

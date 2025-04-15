@@ -1,15 +1,30 @@
 const { PrismaClient } = require('../generated/prisma');
 const prisma = new PrismaClient();
 
+function generateSlug(text) {
+  return text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+}
+
+
 exports.createCollection = async (req, res) => {
   try {
     const { name, description, image } = req.body;
+
+    const slug = generateSlug(name);
+
     const collection = await prisma.collection.create({
-      data: { name, description, image }
+      data: {
+        name,
+        slug,
+        description,
+        image
+      },
     });
+
     res.status(201).json({ status: 'success', data: collection });
   } catch (err) {
-    res.status(500).json({ status: 'fail', message: err.message });
+    console.error(err);
+    res.status(400).json({ status: 'fail', message: err.message });
   }
 };
 

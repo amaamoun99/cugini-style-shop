@@ -4682,18 +4682,30 @@ export namespace Prisma {
   export type CollectionMinAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     slug: string | null
   }
 
   export type CollectionMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    description: string | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
     slug: string | null
   }
 
   export type CollectionCountAggregateOutputType = {
     id: number
     name: number
+    description: number
+    image: number
+    createdAt: number
+    updatedAt: number
     slug: number
     _all: number
   }
@@ -4702,18 +4714,30 @@ export namespace Prisma {
   export type CollectionMinAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
     slug?: true
   }
 
   export type CollectionMaxAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
     slug?: true
   }
 
   export type CollectionCountAggregateInputType = {
     id?: true
     name?: true
+    description?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
     slug?: true
     _all?: true
   }
@@ -4793,6 +4817,10 @@ export namespace Prisma {
   export type CollectionGroupByOutputType = {
     id: string
     name: string
+    description: string | null
+    image: string | null
+    createdAt: Date
+    updatedAt: Date
     slug: string
     _count: CollectionCountAggregateOutputType | null
     _min: CollectionMinAggregateOutputType | null
@@ -4816,6 +4844,10 @@ export namespace Prisma {
   export type CollectionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     slug?: boolean
     products?: boolean | Collection$productsArgs<ExtArgs>
     _count?: boolean | CollectionCountOutputTypeDefaultArgs<ExtArgs>
@@ -4824,22 +4856,34 @@ export namespace Prisma {
   export type CollectionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     slug?: boolean
   }, ExtArgs["result"]["collection"]>
 
   export type CollectionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    description?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     slug?: boolean
   }, ExtArgs["result"]["collection"]>
 
   export type CollectionSelectScalar = {
     id?: boolean
     name?: boolean
+    description?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     slug?: boolean
   }
 
-  export type CollectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug", ExtArgs["result"]["collection"]>
+  export type CollectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "image" | "createdAt" | "updatedAt" | "slug", ExtArgs["result"]["collection"]>
   export type CollectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Collection$productsArgs<ExtArgs>
     _count?: boolean | CollectionCountOutputTypeDefaultArgs<ExtArgs>
@@ -4855,6 +4899,10 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      description: string | null
+      image: string | null
+      createdAt: Date
+      updatedAt: Date
       slug: string
     }, ExtArgs["result"]["collection"]>
     composites: {}
@@ -5282,6 +5330,10 @@ export namespace Prisma {
   interface CollectionFieldRefs {
     readonly id: FieldRef<"Collection", 'String'>
     readonly name: FieldRef<"Collection", 'String'>
+    readonly description: FieldRef<"Collection", 'String'>
+    readonly image: FieldRef<"Collection", 'String'>
+    readonly createdAt: FieldRef<"Collection", 'DateTime'>
+    readonly updatedAt: FieldRef<"Collection", 'DateTime'>
     readonly slug: FieldRef<"Collection", 'String'>
   }
     
@@ -17927,6 +17979,10 @@ export namespace Prisma {
   export const CollectionScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    description: 'description',
+    image: 'image',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
     slug: 'slug'
   };
 
@@ -18288,6 +18344,10 @@ export namespace Prisma {
     NOT?: CollectionWhereInput | CollectionWhereInput[]
     id?: StringFilter<"Collection"> | string
     name?: StringFilter<"Collection"> | string
+    description?: StringNullableFilter<"Collection"> | string | null
+    image?: StringNullableFilter<"Collection"> | string | null
+    createdAt?: DateTimeFilter<"Collection"> | Date | string
+    updatedAt?: DateTimeFilter<"Collection"> | Date | string
     slug?: StringFilter<"Collection"> | string
     products?: ProductListRelationFilter
   }
@@ -18295,6 +18355,10 @@ export namespace Prisma {
   export type CollectionOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     slug?: SortOrder
     products?: ProductOrderByRelationAggregateInput
   }
@@ -18306,12 +18370,20 @@ export namespace Prisma {
     OR?: CollectionWhereInput[]
     NOT?: CollectionWhereInput | CollectionWhereInput[]
     name?: StringFilter<"Collection"> | string
+    description?: StringNullableFilter<"Collection"> | string | null
+    image?: StringNullableFilter<"Collection"> | string | null
+    createdAt?: DateTimeFilter<"Collection"> | Date | string
+    updatedAt?: DateTimeFilter<"Collection"> | Date | string
     products?: ProductListRelationFilter
   }, "id" | "slug">
 
   export type CollectionOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     slug?: SortOrder
     _count?: CollectionCountOrderByAggregateInput
     _max?: CollectionMaxOrderByAggregateInput
@@ -18324,6 +18396,10 @@ export namespace Prisma {
     NOT?: CollectionScalarWhereWithAggregatesInput | CollectionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Collection"> | string
     name?: StringWithAggregatesFilter<"Collection"> | string
+    description?: StringNullableWithAggregatesFilter<"Collection"> | string | null
+    image?: StringNullableWithAggregatesFilter<"Collection"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Collection"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Collection"> | Date | string
     slug?: StringWithAggregatesFilter<"Collection"> | string
   }
 
@@ -19136,6 +19212,10 @@ export namespace Prisma {
   export type CollectionCreateInput = {
     id?: string
     name: string
+    description?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     slug: string
     products?: ProductCreateNestedManyWithoutCollectionInput
   }
@@ -19143,6 +19223,10 @@ export namespace Prisma {
   export type CollectionUncheckedCreateInput = {
     id?: string
     name: string
+    description?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     slug: string
     products?: ProductUncheckedCreateNestedManyWithoutCollectionInput
   }
@@ -19150,6 +19234,10 @@ export namespace Prisma {
   export type CollectionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     slug?: StringFieldUpdateOperationsInput | string
     products?: ProductUpdateManyWithoutCollectionNestedInput
   }
@@ -19157,6 +19245,10 @@ export namespace Prisma {
   export type CollectionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     slug?: StringFieldUpdateOperationsInput | string
     products?: ProductUncheckedUpdateManyWithoutCollectionNestedInput
   }
@@ -19164,18 +19256,30 @@ export namespace Prisma {
   export type CollectionCreateManyInput = {
     id?: string
     name: string
+    description?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     slug: string
   }
 
   export type CollectionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     slug?: StringFieldUpdateOperationsInput | string
   }
 
   export type CollectionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     slug?: StringFieldUpdateOperationsInput | string
   }
 
@@ -20010,18 +20114,30 @@ export namespace Prisma {
   export type CollectionCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     slug?: SortOrder
   }
 
   export type CollectionMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     slug?: SortOrder
   }
 
   export type CollectionMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    description?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     slug?: SortOrder
   }
 
@@ -22026,12 +22142,20 @@ export namespace Prisma {
   export type CollectionCreateWithoutProductsInput = {
     id?: string
     name: string
+    description?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     slug: string
   }
 
   export type CollectionUncheckedCreateWithoutProductsInput = {
     id?: string
     name: string
+    description?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     slug: string
   }
 
@@ -22125,12 +22249,20 @@ export namespace Prisma {
   export type CollectionUpdateWithoutProductsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     slug?: StringFieldUpdateOperationsInput | string
   }
 
   export type CollectionUncheckedUpdateWithoutProductsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     slug?: StringFieldUpdateOperationsInput | string
   }
 
