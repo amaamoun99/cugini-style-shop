@@ -12485,6 +12485,8 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     guestEmail: string | null
+    guestName: string | null
+    guestPhone: string | null
     totalAmount: number | null
     status: string | null
     createdAt: Date | null
@@ -12495,6 +12497,8 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     guestEmail: string | null
+    guestName: string | null
+    guestPhone: string | null
     totalAmount: number | null
     status: string | null
     createdAt: Date | null
@@ -12505,6 +12509,8 @@ export namespace Prisma {
     id: number
     userId: number
     guestEmail: number
+    guestName: number
+    guestPhone: number
     totalAmount: number
     status: number
     createdAt: number
@@ -12525,6 +12531,8 @@ export namespace Prisma {
     id?: true
     userId?: true
     guestEmail?: true
+    guestName?: true
+    guestPhone?: true
     totalAmount?: true
     status?: true
     createdAt?: true
@@ -12535,6 +12543,8 @@ export namespace Prisma {
     id?: true
     userId?: true
     guestEmail?: true
+    guestName?: true
+    guestPhone?: true
     totalAmount?: true
     status?: true
     createdAt?: true
@@ -12545,6 +12555,8 @@ export namespace Prisma {
     id?: true
     userId?: true
     guestEmail?: true
+    guestName?: true
+    guestPhone?: true
     totalAmount?: true
     status?: true
     createdAt?: true
@@ -12642,6 +12654,8 @@ export namespace Prisma {
     id: string
     userId: string | null
     guestEmail: string | null
+    guestName: string | null
+    guestPhone: string | null
     totalAmount: number
     status: string
     createdAt: Date
@@ -12671,6 +12685,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     guestEmail?: boolean
+    guestName?: boolean
+    guestPhone?: boolean
     totalAmount?: boolean
     status?: boolean
     createdAt?: boolean
@@ -12686,6 +12702,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     guestEmail?: boolean
+    guestName?: boolean
+    guestPhone?: boolean
     totalAmount?: boolean
     status?: boolean
     createdAt?: boolean
@@ -12698,6 +12716,8 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     guestEmail?: boolean
+    guestName?: boolean
+    guestPhone?: boolean
     totalAmount?: boolean
     status?: boolean
     createdAt?: boolean
@@ -12710,13 +12730,15 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     guestEmail?: boolean
+    guestName?: boolean
+    guestPhone?: boolean
     totalAmount?: boolean
     status?: boolean
     createdAt?: boolean
     addressId?: boolean
   }
 
-  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "guestEmail" | "totalAmount" | "status" | "createdAt" | "addressId", ExtArgs["result"]["order"]>
+  export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "guestEmail" | "guestName" | "guestPhone" | "totalAmount" | "status" | "createdAt" | "addressId", ExtArgs["result"]["order"]>
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | Order$userArgs<ExtArgs>
     orderItems?: boolean | Order$orderItemsArgs<ExtArgs>
@@ -12745,6 +12767,8 @@ export namespace Prisma {
       id: string
       userId: string | null
       guestEmail: string | null
+      guestName: string | null
+      guestPhone: string | null
       totalAmount: number
       status: string
       createdAt: Date
@@ -13179,6 +13203,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Order", 'String'>
     readonly userId: FieldRef<"Order", 'String'>
     readonly guestEmail: FieldRef<"Order", 'String'>
+    readonly guestName: FieldRef<"Order", 'String'>
+    readonly guestPhone: FieldRef<"Order", 'String'>
     readonly totalAmount: FieldRef<"Order", 'Float'>
     readonly status: FieldRef<"Order", 'String'>
     readonly createdAt: FieldRef<"Order", 'DateTime'>
@@ -18058,6 +18084,8 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     guestEmail: 'guestEmail',
+    guestName: 'guestName',
+    guestPhone: 'guestPhone',
     totalAmount: 'totalAmount',
     status: 'status',
     createdAt: 'createdAt',
@@ -18765,6 +18793,8 @@ export namespace Prisma {
     id?: StringFilter<"Order"> | string
     userId?: StringNullableFilter<"Order"> | string | null
     guestEmail?: StringNullableFilter<"Order"> | string | null
+    guestName?: StringNullableFilter<"Order"> | string | null
+    guestPhone?: StringNullableFilter<"Order"> | string | null
     totalAmount?: FloatFilter<"Order"> | number
     status?: StringFilter<"Order"> | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -18779,6 +18809,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrderInput | SortOrder
     guestEmail?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
+    guestPhone?: SortOrderInput | SortOrder
     totalAmount?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -18796,6 +18828,8 @@ export namespace Prisma {
     NOT?: OrderWhereInput | OrderWhereInput[]
     userId?: StringNullableFilter<"Order"> | string | null
     guestEmail?: StringNullableFilter<"Order"> | string | null
+    guestName?: StringNullableFilter<"Order"> | string | null
+    guestPhone?: StringNullableFilter<"Order"> | string | null
     totalAmount?: FloatFilter<"Order"> | number
     status?: StringFilter<"Order"> | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -18810,6 +18844,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrderInput | SortOrder
     guestEmail?: SortOrderInput | SortOrder
+    guestName?: SortOrderInput | SortOrder
+    guestPhone?: SortOrderInput | SortOrder
     totalAmount?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -18828,6 +18864,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Order"> | string
     userId?: StringNullableWithAggregatesFilter<"Order"> | string | null
     guestEmail?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    guestName?: StringNullableWithAggregatesFilter<"Order"> | string | null
+    guestPhone?: StringNullableWithAggregatesFilter<"Order"> | string | null
     totalAmount?: FloatWithAggregatesFilter<"Order"> | number
     status?: StringWithAggregatesFilter<"Order"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -19636,6 +19674,8 @@ export namespace Prisma {
   export type OrderCreateInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -19649,6 +19689,8 @@ export namespace Prisma {
     id?: string
     userId?: string | null
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -19660,6 +19702,8 @@ export namespace Prisma {
   export type OrderUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19673,6 +19717,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19685,6 +19731,8 @@ export namespace Prisma {
     id?: string
     userId?: string | null
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -19694,6 +19742,8 @@ export namespace Prisma {
   export type OrderUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19703,6 +19753,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20449,6 +20501,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     guestEmail?: SortOrder
+    guestName?: SortOrder
+    guestPhone?: SortOrder
     totalAmount?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -20463,6 +20517,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     guestEmail?: SortOrder
+    guestName?: SortOrder
+    guestPhone?: SortOrder
     totalAmount?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -20473,6 +20529,8 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     guestEmail?: SortOrder
+    guestName?: SortOrder
+    guestPhone?: SortOrder
     totalAmount?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -21738,6 +21796,8 @@ export namespace Prisma {
   export type OrderCreateWithoutUserInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -21749,6 +21809,8 @@ export namespace Prisma {
   export type OrderUncheckedCreateWithoutUserInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -21855,6 +21917,8 @@ export namespace Prisma {
     id?: StringFilter<"Order"> | string
     userId?: StringNullableFilter<"Order"> | string | null
     guestEmail?: StringNullableFilter<"Order"> | string | null
+    guestName?: StringNullableFilter<"Order"> | string | null
+    guestPhone?: StringNullableFilter<"Order"> | string | null
     totalAmount?: FloatFilter<"Order"> | number
     status?: StringFilter<"Order"> | string
     createdAt?: DateTimeFilter<"Order"> | Date | string
@@ -21943,6 +22007,8 @@ export namespace Prisma {
   export type OrderCreateWithoutAddressInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -21955,6 +22021,8 @@ export namespace Prisma {
     id?: string
     userId?: string | null
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23039,6 +23107,8 @@ export namespace Prisma {
   export type OrderCreateWithoutOrderItemsInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23051,6 +23121,8 @@ export namespace Prisma {
     id?: string
     userId?: string | null
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23104,6 +23176,8 @@ export namespace Prisma {
   export type OrderUpdateWithoutOrderItemsInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23116,6 +23190,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23159,6 +23235,8 @@ export namespace Prisma {
   export type OrderCreateWithoutPaymentInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23171,6 +23249,8 @@ export namespace Prisma {
     id?: string
     userId?: string | null
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23197,6 +23277,8 @@ export namespace Prisma {
   export type OrderUpdateWithoutPaymentInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23209,6 +23291,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23434,6 +23518,8 @@ export namespace Prisma {
   export type OrderCreateManyUserInput = {
     id?: string
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23472,6 +23558,8 @@ export namespace Prisma {
   export type OrderUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23483,6 +23571,8 @@ export namespace Prisma {
   export type OrderUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23494,6 +23584,8 @@ export namespace Prisma {
   export type OrderUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23504,6 +23596,8 @@ export namespace Prisma {
     id?: string
     userId?: string | null
     guestEmail?: string | null
+    guestName?: string | null
+    guestPhone?: string | null
     totalAmount: number
     status: string
     createdAt?: Date | string
@@ -23512,6 +23606,8 @@ export namespace Prisma {
   export type OrderUpdateWithoutAddressInput = {
     id?: StringFieldUpdateOperationsInput | string
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23524,6 +23620,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -23535,6 +23633,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     guestEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    guestName?: NullableStringFieldUpdateOperationsInput | string | null
+    guestPhone?: NullableStringFieldUpdateOperationsInput | string | null
     totalAmount?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

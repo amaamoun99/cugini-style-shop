@@ -30,10 +30,20 @@ exports.calculateTotal = async function (req, res) {
 
 exports.placeOrder = async function (req, res) {
   try {
-    const { shippingAddress, paymentMethod } = req.body;
-    const order = await checkoutService.createOrder(req.cartIdentity, shippingAddress, paymentMethod);
-    res.json({ status: 'success', order });
+    const { shippingAddress, paymentMethod, email, phoneNumber, guestName } = req.body;
+
+    const order = await checkoutService.createOrder(
+      req.cartIdentity,
+      shippingAddress,
+      paymentMethod,
+      email,
+      phoneNumber,
+      guestName
+    );
+
+    res.json({ status: "success", order });
   } catch (err) {
-    res.status(400).json({ status: 'fail', message: err.message });
+    res.status(400).json({ status: "fail", message: err.message });
   }
 };
+

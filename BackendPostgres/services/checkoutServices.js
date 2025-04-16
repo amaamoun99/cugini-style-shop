@@ -46,12 +46,16 @@ exports.calculateCartTotal = async function (cartIdentity) {
 exports.createOrder = async function (
   cartIdentity,
   shippingAddress,
-  paymentMethod
+  paymentMethod,
+  email,
+  phoneNumber,
+  guestName
 ) {
   const cart = await getOrCreateCart(cartIdentity);
-  if (!cart || cart.items.length === 0) throw new Error("Cart is empty");
+  if (!cart || cart.items.length === 0) {
+    throw new Error("Cart is empty");
+  }
 
-  // Validate address again
   if (!shippingAddress || !shippingAddress.street) {
     throw new Error("Invalid shipping address");
   }
@@ -66,10 +70,12 @@ exports.createOrder = async function (
       },
     });
 
-    const createdOrder = await tx.Order.create({
+    const createdOrder = await tx.order.create({
       data: {
         userId: cart.userId,
-        guestEmail: cart.userId ? null : "guest@example.com",
+        guestEmail: cart.userId ? null : email,
+        guestPhone: cart.userId ? null : phoneNumber,
+        guestName: cart.userId ? null : guestName,
         addressId: newAddress.id,
         totalAmount: total.total,
         status: "pending",
@@ -77,16 +83,21 @@ exports.createOrder = async function (
     });
 
     for (let item of cart.items) {
-      await tx.OrderItem.create({
+      // Make sure item.variant includes the `product` price!
+      const variant = await tx.productVariant.findUnique({
+        where: { id: item.variantId },
+        include: { product: true },
+      });
+
+      await tx.orderItem.create({
         data: {
           orderId: createdOrder.id,
           variantId: item.variantId,
           quantity: item.quantity,
-          price: item.variant.product.price,
+          price: variant.product.price, // corrected this!
         },
       });
 
-      // Reduce stock
       await tx.productVariant.update({
         where: { id: item.variantId },
         data: { stock: { decrement: item.quantity } },
@@ -103,7 +114,6 @@ exports.createOrder = async function (
       });
     }
 
-    // Clear cart
     await tx.cartItem.deleteMany({
       where: { cartId: cart.id },
     });
@@ -113,3 +123,4 @@ exports.createOrder = async function (
 
   return order;
 };
+
