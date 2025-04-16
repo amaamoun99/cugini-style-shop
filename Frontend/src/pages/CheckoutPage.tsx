@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchCheckoutSession, placeOrder } from '@/api/checkout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,6 +41,8 @@ const CheckoutPage: React.FC = () => {
   const [discountCode, setDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const loadCart = async () => {
       try {
@@ -78,7 +80,7 @@ const CheckoutPage: React.FC = () => {
     const shippingAddress = {
       street: shippingInfo.street,
       city: shippingInfo.city,
-      state: "EG", // if you want to set this statically or from a dropdown
+      state: "EG",
       zip: shippingInfo.zipCode,
       country: shippingInfo.country,
     };
@@ -87,22 +89,17 @@ const CheckoutPage: React.FC = () => {
     const phoneNumber = shippingInfo.phone;
   
     try {
-      console.log('Sending order:', {
-        shippingAddress,
-        paymentMethod,
-        email,
-        phoneNumber,
-        guestName
-      });
       const order = await placeOrder(shippingAddress, paymentMethod, email, phoneNumber, guestName);
-      console.log('Order created:', order);
-      alert('Order submitted successfully!');
+      navigate('/order-completed', { 
+        state: { 
+          orderDetails: order
+        } 
+      });
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Failed to submit order. Please try again.');
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-background py-10 px-4 md:px-8">
