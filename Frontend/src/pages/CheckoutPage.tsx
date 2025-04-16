@@ -52,7 +52,6 @@ const CheckoutPage: React.FC = () => {
         console.error('Failed to load cart items:', error);
       }
     };
-
     loadCart();
   }, []);
 
@@ -76,7 +75,7 @@ const CheckoutPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const shippingAddress = {
       street: shippingInfo.street,
       city: shippingInfo.city,
@@ -84,17 +83,13 @@ const CheckoutPage: React.FC = () => {
       zip: shippingInfo.zipCode,
       country: shippingInfo.country,
     };
-  
+
     const guestName = `${shippingInfo.firstName} ${shippingInfo.lastName}`;
     const phoneNumber = shippingInfo.phone;
-  
+
     try {
-      const order = await placeOrder(shippingAddress, paymentMethod, email, phoneNumber, guestName);
-      navigate('/order-completed', { 
-        state: { 
-          orderDetails: order
-        } 
-      });
+      const orderResponse = await placeOrder(shippingAddress, paymentMethod, email, phoneNumber, guestName);
+      navigate('/order-completed', { state: { order: orderResponse.order } });
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Failed to submit order. Please try again.');
@@ -123,28 +118,14 @@ const CheckoutPage: React.FC = () => {
                 <div className="space-y-4 mb-6">
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Your email address"
-                      required
-                      className="mt-1"
-                    />
+                    <Input id="email" type="email" value={email}
+                      onChange={(e) => setEmail(e.target.value)} required placeholder="Your email address" className="mt-1" />
                   </div>
-
                   <div>
                     <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={shippingInfo.phone}
+                    <Input id="phone" type="tel" value={shippingInfo.phone}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
-                      placeholder="Phone number for delivery updates"
-                      required
-                      className="mt-1"
-                    />
+                      required placeholder="Phone number for delivery updates" className="mt-1" />
                   </div>
                 </div>
 
@@ -154,73 +135,39 @@ const CheckoutPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                   <div>
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input
-                      id="firstName"
-                      value={shippingInfo.firstName}
+                    <Input id="firstName" value={shippingInfo.firstName}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, firstName: e.target.value })}
-                      placeholder="First name"
-                      required
-                      className="mt-1"
-                    />
+                      required placeholder="First name" className="mt-1" />
                   </div>
-
                   <div>
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input
-                      id="lastName"
-                      value={shippingInfo.lastName}
+                    <Input id="lastName" value={shippingInfo.lastName}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, lastName: e.target.value })}
-                      placeholder="Last name"
-                      required
-                      className="mt-1"
-                    />
+                      required placeholder="Last name" className="mt-1" />
                   </div>
-
                   <div className="md:col-span-2">
                     <Label htmlFor="street">Street</Label>
-                    <Input
-                      id="street"
-                      value={shippingInfo.street}
+                    <Input id="street" value={shippingInfo.street}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, street: e.target.value })}
-                      placeholder="Street address"
-                      required
-                      className="mt-1"
-                    />
+                      required placeholder="Street address" className="mt-1" />
                   </div>
-
                   <div className="md:col-span-2">
                     <Label htmlFor="address">Additional Address Info</Label>
-                    <Input
-                      id="address"
-                      value={shippingInfo.address}
+                    <Input id="address" value={shippingInfo.address}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                      placeholder="Apartment, suite, etc."
-                      className="mt-1"
-                    />
+                      placeholder="Apartment, suite, etc." className="mt-1" />
                   </div>
-
                   <div>
                     <Label htmlFor="city">City</Label>
-                    <Input
-                      id="city"
-                      value={shippingInfo.city}
+                    <Input id="city" value={shippingInfo.city}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
-                      placeholder="City"
-                      required
-                      className="mt-1"
-                    />
+                      required placeholder="City" className="mt-1" />
                   </div>
-
                   <div>
                     <Label htmlFor="zipCode">ZIP Code</Label>
-                    <Input
-                      id="zipCode"
-                      value={shippingInfo.zipCode}
+                    <Input id="zipCode" value={shippingInfo.zipCode}
                       onChange={(e) => setShippingInfo({ ...shippingInfo, zipCode: e.target.value })}
-                      placeholder="ZIP Code"
-                      required
-                      className="mt-1"
-                    />
+                      required placeholder="ZIP Code" className="mt-1" />
                   </div>
                 </div>
 
@@ -231,9 +178,7 @@ const CheckoutPage: React.FC = () => {
                   <div className="flex items-center justify-between border p-4 rounded-md opacity-50 pointer-events-none">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="card" id="card" disabled />
-                      <Label htmlFor="card" className="font-medium flex items-center">
-                        Pay with Credit Card (Unavailable)
-                      </Label>
+                      <Label htmlFor="card" className="font-medium flex items-center">Pay with Credit Card (Unavailable)</Label>
                     </div>
                   </div>
 
@@ -241,19 +186,15 @@ const CheckoutPage: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="cod" id="cod" />
                       <Label htmlFor="cod" className="font-medium flex items-center">
-                        <Truck className="mr-2 h-5 w-5" />
-                        Payment on Delivery
+                        <Truck className="mr-2 h-5 w-5" /> Payment on Delivery
                       </Label>
                     </div>
                   </div>
                 </RadioGroup>
 
                 <div className="flex items-center space-x-2 mt-4">
-                  <Checkbox
-                    id="saveInfo"
-                    checked={saveInfo}
-                    onCheckedChange={(checked) => setSaveInfo(checked as boolean)}
-                  />
+                  <Checkbox id="saveInfo" checked={saveInfo}
+                    onCheckedChange={(checked) => setSaveInfo(!!checked)} />
                   <Label htmlFor="saveInfo" className="text-sm">Save this information for next time</Label>
                 </div>
               </CardContent>
@@ -264,15 +205,12 @@ const CheckoutPage: React.FC = () => {
             <Card className="border-muted sticky top-8">
               <CardContent className="p-6">
                 <h3 className="text-lg font-medium mb-4">Order Summary</h3>
-
                 <div className="space-y-4 max-h-80 overflow-auto mb-4">
-                  {cartItems.map((item) => (
+                  {cartItems.map(item => (
                     <div key={item.id} className="flex items-center space-x-4">
                       <div className="flex-1">
                         <h3 className="font-medium text-sm">{item.variant.product.name}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {item.variant.color} / {item.variant.size}
-                        </p>
+                        <p className="text-xs text-muted-foreground">{item.variant.color} / {item.variant.size}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">${item.variant.product.price.toFixed(2)}</p>
@@ -282,39 +220,16 @@ const CheckoutPage: React.FC = () => {
                 </div>
 
                 <Separator className="my-4" />
-
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                {discountApplied && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Discount</span>
-                    <span>-${discount.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span>${shipping.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Taxes</span>
-                  <span>${tax.toFixed(2)}</span>
-                </div>
-
+                <div className="flex justify-between"><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
+                {discountApplied && <div className="flex justify-between text-green-600"><span>Discount</span><span>-${discount.toFixed(2)}</span></div>}
+                <div className="flex justify-between"><span>Shipping</span><span>${shipping.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span>Taxes</span><span>${tax.toFixed(2)}</span></div>
                 <Separator className="my-4" />
-
-                <div className="flex justify-between font-medium text-lg mb-6">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
-
+                <div className="flex justify-between font-medium text-lg mb-6"><span>Total</span><span>${total.toFixed(2)}</span></div>
                 <Button type="submit" className="w-full btn-vintage mb-2">Complete Order</Button>
-
                 <div className="mt-4 text-center">
                   <Link to="/cart" className="text-sm text-muted-foreground flex items-center justify-center">
-                    <ChevronLeft className="h-4 w-4 mr-1" />
-                    Return to cart
+                    <ChevronLeft className="h-4 w-4 mr-1" /> Return to cart
                   </Link>
                 </div>
               </CardContent>

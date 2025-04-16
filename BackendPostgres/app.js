@@ -25,7 +25,7 @@ app.use(
     credentials: true, // allow cookies
   })
 );
-app.use(express.static(path.join(__dirname, "public")));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cookieParser());         // ✅ Parse cookies first
 app.use(ensureSessionId);
