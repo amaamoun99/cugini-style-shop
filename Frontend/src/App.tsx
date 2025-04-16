@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,7 +11,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import AboutPage from "./pages/AboutPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import CartPage from "./pages/CartPage";
-import { SpeedInsights  } from "@vercel/speed-insights/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +32,7 @@ const App = () => (
           <Route path="/shop/women" element={<ShopCatalog />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/about" element={<AboutPage />} />
+
           {/* Add other routes here */}
           <Route path="*" element={<NotFound />} />
         </Routes>
