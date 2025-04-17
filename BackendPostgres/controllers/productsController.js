@@ -24,44 +24,12 @@ exports.getProductById = factory.getOne(
 
 exports.createProduct = async (req, res) => {
   try {
-    const images = req.files?.map((file) => ({
-      url: `/uploads/${file.filename}`,
-      altText: file.originalname,
-    }));
-
-    const {
-      name,
-      description,
-      price,
-      category,
-      collection,
-      variants: variantsString,
-    } = req.body;
-
-    console.log('🧾 Body:', req.body);
-    console.log('🖼️ Files:', req.files);
-
-    const variants = JSON.parse(variantsString || '[]');
-
-    const product = await productService.createProduct({
-      name,
-      description,
-      price,
-      category,
-      collection,
-      variants,
-      images,
-    });
-
+    const product = await productService.createProduct(req.body);
     return res.status(201).json({ success: true, data: product });
   } catch (error) {
-    console.error('❌ Error in createProduct controller:', error);
-    return res.status(500).json({ success: false, message: 'Failed to create product.', error: error.message });
+    // Handle error
   }
 };
-
-
-
 exports.updateProductById = factory.updateOne({ modelName: "Product" });
 
 
