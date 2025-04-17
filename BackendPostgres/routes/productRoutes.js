@@ -1,5 +1,8 @@
 const express = require("express");
 const productController = require("../controllers/productsController");
+const { authenticate } = require("../middlewares/authenticate");
+const { isAdmin } = require("../middlewares/isAdmin");
+const upload = require('../middlewares/upload');
 // const multer = require('multer');
 const router = express.Router();
 
@@ -7,7 +10,7 @@ const router = express.Router();
 router
   .route("/")
   .get(productController.getAllProducts) // GET /api/products
-  .post(productController.createProduct); // POST /api/products
+  .post(authenticate,isAdmin,upload.array('images', 5),productController.createProduct); // POST /api/products
 
 router.get("/search", productController.searchProducts); // GET /api/products/search
 
