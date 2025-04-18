@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { fetchCart, updateCartItem, deleteCartItem } from "@/api/cart";
+import { useCart } from "@/contexts/CartContext";
 import {
   MinusCircle,
   PlusCircle,
@@ -10,6 +10,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -17,49 +18,47 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const { cartItems, updateItem, removeItem, refreshCart, isLoading } = useCart();
 
   const [promoCode, setPromoCode] = useState("");
   const [isPromoApplied, setIsPromoApplied] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   useEffect(() => {
-    const loadCart = async () => {
-      try {
-        const response = await fetchCart();
-        console.log("fetching cart", response.items);
-        const itemsFromBackend = response.items; // depends on your service response shape
-        setCartItems(itemsFromBackend);
-      } catch (error) {
-        console.error("Failed to load cart:", error);
-      }
-    };
-
-    loadCart();
+    // The cart is already loaded by the CartContext
+    // We don't need to fetch it again
   }, []);
 
-  const handleQuantityChange = async (id: number, change: number) => {
+  const handleQuantityChange = async (id: string, change: number) => {
     const item = cartItems.find((item) => item.id === id);
     if (!item) return;
 
     const newQuantity = Math.max(1, item.quantity + change);
     try {
-      await updateCartItem(id, newQuantity);
-      setCartItems((items) =>
-        items.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
+      // Use the CartContext updateItem method which will automatically refresh the cart
+      await updateItem(id, newQuantity);
+      
+      toast({
+        title: "Quantity updated",
+        description: "Cart has been updated with the new quantity.",
+        variant: "default",
+      });
     } catch (error) {
       console.error("Failed to update quantity:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update item quantity. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
-  const handleRemoveItem = async (id: number) => {
+  const handleRemoveItem = async (id: string) => {
     try {
-      await deleteCartItem(id);
-      setCartItems((items) => items.filter((item) => item.id !== id));
+      // Use the CartContext removeItem method which will automatically refresh the cart
+      await removeItem(id);
 
       toast({
         title: "Item removed",
@@ -68,6 +67,11 @@ const CartPage = () => {
       });
     } catch (error) {
       console.error("Failed to remove item:", error);
+      toast({
+        title: "Error",
+        description: "Failed to remove item from cart. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -91,7 +95,7 @@ const CartPage = () => {
   const calculateSubtotal = () => {
     if (!cartItems || !Array.isArray(cartItems)) return 0;
     return cartItems.reduce(
-      (sum, item) => sum + item.variant?.product?.price * item.quantity,
+      (sum, item) => sum + (item.variant?.product?.price || 0) * item.quantity,
       0
     );
   };
@@ -111,8 +115,12 @@ const CartPage = () => {
     });
   };
 
-  const handleCheckout = () => {
-    navigate("/checkout");
+  const handleProceedToCheckout = () => {
+    setIsCheckingOut(true);
+    // Short timeout to show loading state before navigation
+    setTimeout(() => {
+      navigate("/checkout");
+    }, 500);
   };
 
   return (
@@ -154,15 +162,15 @@ const CartPage = () => {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="sm:w-24 sm:h-24 flex-shrink-0">
                           <img
-                            src={item.image}
-                            alt={item.name}
+                            src={`http://localhost:3000${item.variant.product.images[0].url}`}
+                            alt={item.variant.product.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
 
                         <div className="flex-grow space-y-2">
                           <div className="flex justify-between">
-                            <h3 className="font-medium text-lg">{item.name}</h3>
+                            <h3 className="font-medium text-lg">{item.variant.product.name}</h3>
                             <button
                               onClick={() => handleRemoveItem(item.id)}
                               aria-label="Remove item"
@@ -173,9 +181,7 @@ const CartPage = () => {
                           </div>
 
                           <div className="text-sm text-gray-500">
-                            <span>Size: {item.variant?.size || 0}</span>
-                            <span className="mx-2">|</span>
-                            <span>Color: {item.variant?.color}</span>
+                            <span>Size: {item.size}</span>
                           </div>
 
                           <div className="flex justify-between items-center mt-2">
@@ -205,11 +211,11 @@ const CartPage = () => {
                               <div className="font-medium">
                                 $
                                 {(
-                                  (item.variant?.product?.price || 0) * item.quantity
+                                  item.variant.product.price * item.quantity
                                 ).toFixed(2)}
                               </div>
                               <div className="text-sm text-gray-500">
-                                ${(item.variant?.product?.price || 0).toFixed(2)} each
+                                ${item.variant.product.price.toFixed(2)} each
                               </div>
                             </div>
                           </div>
@@ -245,13 +251,6 @@ const CartPage = () => {
                       <span>${subtotal.toFixed(2)}</span>
                     </div>
 
-                    {isPromoApplied && (
-                      <div className="flex justify-between text-green-600">
-                        <span>Discount (10%)</span>
-                        <span>-${discount.toFixed(2)}</span>
-                      </div>
-                    )}
-
                     <div className="flex justify-between">
                       <span className="text-gray-600">Shipping</span>
                       <span>
@@ -274,33 +273,18 @@ const CartPage = () => {
 
                   <div className="space-y-4">
                     <div className="flex gap-2">
-                      <Input
-                        placeholder="Promo code"
-                        value={promoCode}
-                        onChange={(e) => setPromoCode(e.target.value)}
-                        disabled={isPromoApplied}
-                      />
-                      <Button
-                        variant="outline"
-                        onClick={handleApplyPromo}
-                        disabled={isPromoApplied || !promoCode}
-                      >
-                        Apply
-                      </Button>
+                     
                     </div>
 
-                    {isPromoApplied && (
-                      <div className="text-sm text-green-600">
-                        Promo code "CUGINI10" applied!
-                      </div>
-                    )}
-
-                    <Button
+                    <LoadingButton 
                       className="w-full bg-cugini-golden hover:bg-cugini-golden/90 text-white"
-                      onClick={handleCheckout}
+                      onClick={handleProceedToCheckout}
+                      disabled={cartItems.length === 0}
+                      isLoading={isCheckingOut}
+                      loadingText="Loading Checkout..."
                     >
                       Proceed to Checkout
-                    </Button>
+                    </LoadingButton>
                   </div>
                 </div>
               </Card>

@@ -25,6 +25,7 @@ export const placeOrder = async (shippingAddress, paymentMethod, email, phoneNum
       phoneNumber,
       guestName,
     });
-    return res.data.order;
+    console.log('Order response:', res.data);
+    return res.data;
   };
   

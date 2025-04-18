@@ -1,35 +1,40 @@
 const { PrismaClient } = require("../generated/prisma");
 const prisma = new PrismaClient();
-const { getOrCreateCart } = require("./cartServices");
+const cartService = require("./cartServices");
 
 exports.loadCheckoutData = async function (cartIdentity) {
-  const cart = await getOrCreateCart(cartIdentity);
+  // Validate stock at checkout start to catch any inventory changes
+  const stockValidation = await cartService.validateCartStock(cartIdentity);
+  if (!stockValidation.valid) {
+    const itemNames = stockValidation.invalidItems.map(item => 
+      `${item.productName} (requested: ${item.requested}, available: ${item.available})`
+    ).join(", ");
+    throw new Error(`Some items in your cart are no longer available in requested quantities: ${itemNames}`);
+  }
+
+  const cart = await cartService.getOrCreateCart(cartIdentity);
   if (!cart || cart.items.length === 0) throw new Error("Cart is empty");
   return cart;
 };
 
-exports.validateCartAndAddress = async function (
-  cartIdentity,
-  shippingAddress
-) {
-  const cart = await getOrCreateCart(cartIdentity);
-  if (!cart || cart.items.length === 0) throw new Error("Cart is empty");
-
+exports.validateCartAndAddress = async function (cartIdentity, shippingAddress) {
   // Basic address validation
   if (!shippingAddress || !shippingAddress.street || !shippingAddress.city) {
     throw new Error("Invalid address");
   }
 
-  // Optional: Check item stock
-  for (let item of cart.items) {
-    if (item.variant.stock < item.quantity) {
-      throw new Error(`Insufficient stock for SKU ${item.variant.sku}`);
-    }
+  // Revalidate stock at this step too
+  const stockValidation = await cartService.validateCartStock(cartIdentity);
+  if (!stockValidation.valid) {
+    const itemNames = stockValidation.invalidItems.map(item => 
+      `${item.productName} (requested: ${item.requested}, available: ${item.available})`
+    ).join(", ");
+    throw new Error(`Some items in your cart are no longer available in requested quantities: ${itemNames}`);
   }
 };
 
 exports.calculateCartTotal = async function (cartIdentity) {
-  const cart = await getOrCreateCart(cartIdentity);
+  const cart = await cartService.getOrCreateCart(cartIdentity);
   if (!cart || cart.items.length === 0) throw new Error("Cart is empty");
 
   let subtotal = 0;
@@ -51,76 +56,142 @@ exports.createOrder = async function (
   phoneNumber,
   guestName
 ) {
-  const cart = await getOrCreateCart(cartIdentity);
-  if (!cart || cart.items.length === 0) {
-    throw new Error("Cart is empty");
-  }
+  return prisma.$transaction(async (tx) => {
+    try {
+      // We need to get the cart and validate stock within the transaction 
+      // to ensure consistency
+      const cart = await cartService._getOrCreateCartTx(cartIdentity, tx);
+  
+      if (!cart || cart.items.length === 0) {
+        throw new Error("Cart is empty");
+      }
+  
+      if (!shippingAddress || !shippingAddress.street) {
+        throw new Error("Invalid shipping address");
+      }
 
-  if (!shippingAddress || !shippingAddress.street) {
-    throw new Error("Invalid shipping address");
-  }
-
-  const total = await this.calculateCartTotal(cartIdentity);
-
-  const order = await prisma.$transaction(async (tx) => {
-    const newAddress = await tx.address.create({
-      data: {
-        userId: cart.userId,
-        ...shippingAddress,
-      },
-    });
-
-    const createdOrder = await tx.order.create({
-      data: {
-        userId: cart.userId,
-        guestEmail: cart.userId ? null : email,
-        guestPhone: cart.userId ? null : phoneNumber,
-        guestName: cart.userId ? null : guestName,
-        addressId: newAddress.id,
-        totalAmount: total.total,
-        status: "pending",
-      },
-    });
-
-    for (let item of cart.items) {
-      // Make sure item.variant includes the `product` price!
-      const variant = await tx.productVariant.findUnique({
-        where: { id: item.variantId },
-        include: { product: true },
-      });
-
-      await tx.orderItem.create({
+      // Calculate total (could also move this into transaction for maximum safety)
+      let subtotal = 0;
+      for (let item of cart.items) {
+        subtotal += item.quantity * item.variant.product.price;
+      }
+      const shipping = 30;
+      const total = subtotal + shipping;
+  
+      // Create address first
+      const newAddress = await tx.address.create({
         data: {
-          orderId: createdOrder.id,
-          variantId: item.variantId,
-          quantity: item.quantity,
-          price: variant.product.price, // corrected this!
+          userId: cart.userId,
+          ...shippingAddress,
         },
       });
-
-      await tx.productVariant.update({
-        where: { id: item.variantId },
-        data: { stock: { decrement: item.quantity } },
-      });
-    }
-
-    if (paymentMethod) {
-      await tx.payment.create({
+  
+      // Create order
+      const createdOrder = await tx.order.create({
         data: {
-          orderId: createdOrder.id,
-          method: paymentMethod,
-          status: "unpaid",
+          userId: cart.userId,
+          guestEmail: cart.userId ? null : email,
+          guestPhone: cart.userId ? null : phoneNumber,
+          guestName: cart.userId ? null : guestName,
+          addressId: newAddress.id,
+          totalAmount: total,
+          status: "pending",
         },
       });
+  
+      // Process each item, updating inventory with pessimistic locking
+      for (let item of cart.items) {
+        // Lock the row to prevent concurrent updates
+        // This is PostgreSQL-specific FOR UPDATE locking
+        const lockedVariant = await tx.$queryRaw`
+          SELECT * FROM "ProductVariant"
+          WHERE id = ${item.variantId}
+          FOR UPDATE
+        `;
+  
+        // Now fetch the variant data
+        const variant = await tx.productVariant.findUnique({
+          where: { id: item.variantId },
+          include: { product: true },
+        });
+  
+        if (!variant) {
+          throw new Error(`Product variant ${item.variantId} not found`);
+        }
+  
+        // Verify sufficient stock within transaction
+        if (variant.stock < item.quantity) {
+          throw new Error(`Insufficient stock for ${variant.product.name} (${variant.sku}). Only ${variant.stock} available.`);
+        }
+  
+        // Create order item
+        await tx.orderItem.create({
+          data: {
+            orderId: createdOrder.id,
+            variantId: item.variantId,
+            quantity: item.quantity,
+            price: variant.product.price,
+          },
+        });
+  
+        // Update stock (decrement by purchased quantity)
+        await tx.productVariant.update({
+          where: { id: item.variantId },
+          data: {
+            stock: { decrement: item.quantity },
+          },
+        });
+      }
+  
+      // Create payment record
+      if (paymentMethod) {
+        await tx.payment.create({
+          data: {
+            orderId: createdOrder.id,
+            method: paymentMethod,
+            status: "unpaid",
+          },
+        });
+      }
+  
+      // Clear the cart
+      await tx.cartItem.deleteMany({
+        where: { cartId: cart.id },
+      });
+  
+      // Return created order with all details
+      return tx.order.findUnique({
+        where: { id: createdOrder.id },
+        include: {
+          orderItems: {
+            include: {
+              variant: {
+                include: { product: true }
+              }
+            }
+          },
+          payment: true,
+          address: true
+        }
+      });
+    } catch (error) {
+      // All changes will be rolled back automatically on error
+      throw new Error(`Failed to create order: ${error.message}`);
     }
-
-    await tx.cartItem.deleteMany({
-      where: { cartId: cart.id },
-    });
-
-    return createdOrder;
+  }, {
+    // Set a longer timeout for checkout process
+    // PostgreSQL default is typically ~30s but for complex checkouts with many items
+    // it might be good to have more time
+    timeout: 60000, // 60 seconds
+    
+    // Using the default isolation level (READ COMMITTED) for most databases
+    // For stricter isolation (prevents phantom reads) you could use:
+    // isolation: 'serializable'
   });
-
-  return order;
 };
 
+// New method to reserve inventory temporarily (optional)
+exports.reserveInventory = async function(cartIdentity, durationMinutes = 15) {
+  // This would implement a temporary hold system for inventory
+  // Could be implemented if needed in the future
+};

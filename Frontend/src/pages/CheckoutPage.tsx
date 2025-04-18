@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchCheckoutSession, placeOrder } from '@/api/checkout';
+import { useCart } from '@/contexts/CartContext';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { LoadingButton } from '@/components/ui/loading-button';
 import { Separator } from '@/components/ui/separator';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -24,7 +26,9 @@ interface CartItem {
 }
 
 const CheckoutPage: React.FC = () => {
+  const { clearCart } = useCart();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isProcessingOrder, setIsProcessingOrder] = useState<boolean>(false);
   const [email, setEmail] = useState('');
   const [shippingInfo, setShippingInfo] = useState({
     firstName: '',
@@ -88,12 +92,27 @@ const CheckoutPage: React.FC = () => {
     const phoneNumber = shippingInfo.phone;
 
     try {
+      setIsProcessingOrder(true);
+      console.log('Placing order with:', { shippingAddress, paymentMethod, email, phoneNumber, guestName });
       const orderResponse = await placeOrder(shippingAddress, paymentMethod, email, phoneNumber, guestName);
-      navigate('/order-completed', { state: { order: orderResponse.order } });
+      console.log('Order response received:', orderResponse);
+      
+      // Clear the cart after successful order placement
+      await clearCart();
+      
+      // Prepare order data for the completion page
+      const orderData = orderResponse.order || orderResponse;
+      console.log('Order data for navigation:', orderData);
+      
+      // Use window.location for a full page navigation instead of React Router
+      // This is more reliable for state transitions between pages
+      window.location.href = `/order-completed?orderId=${orderData.id}`;
     } catch (error) {
       console.error('Error placing order:', error);
       alert('Failed to submit order. Please try again.');
+      setIsProcessingOrder(false); // Reset loading state on error
     }
+    // We don't need a finally block since on success we're navigating away from the page
   };
 
   return (
@@ -226,7 +245,14 @@ const CheckoutPage: React.FC = () => {
                 <div className="flex justify-between"><span>Taxes</span><span>${tax.toFixed(2)}</span></div>
                 <Separator className="my-4" />
                 <div className="flex justify-between font-medium text-lg mb-6"><span>Total</span><span>${total.toFixed(2)}</span></div>
-                <Button type="submit" className="w-full btn-vintage mb-2">Complete Order</Button>
+                <LoadingButton 
+                  type="submit" 
+                  className="w-full btn-vintage" 
+                  isLoading={isProcessingOrder}
+                  loadingText="Processing Order..."
+                >
+                  Place Order
+                </LoadingButton>
                 <div className="mt-4 text-center">
                   <Link to="/cart" className="text-sm text-muted-foreground flex items-center justify-center">
                     <ChevronLeft className="h-4 w-4 mr-1" /> Return to cart

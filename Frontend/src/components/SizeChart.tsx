@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { RulerIcon, ChevronRightIcon } from 'lucide-react';
 
 interface SizeChartProps {
   category: string;
@@ -86,7 +86,10 @@ const SizeChart: React.FC<SizeChartProps> = ({ category }) => {
   if (isMobile) {
     return (
       <Sheet>
-        <SheetTrigger className="text-sm underline hover:text-cugini-golden">Size Guide</SheetTrigger>
+        <SheetTrigger className="inline-flex items-center px-4 py-2 text-sm text-cugini-dark border border-cugini-dark hover:bg-cugini-dark hover:text-white transition-colors rounded-none">
+          Size Guide
+          <RulerIcon className="ml-2 h-4 w-4" />
+        </SheetTrigger>
         <SheetContent side="bottom" className="h-[85vh] overflow-y-auto">
           <SheetHeader className="mb-6">
             <SheetTitle className="text-xl font-serif">{chartData.title}</SheetTitle>
@@ -99,7 +102,10 @@ const SizeChart: React.FC<SizeChartProps> = ({ category }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className="text-sm underline hover:text-cugini-golden">Size Guide</DialogTrigger>
+      <DialogTrigger className="inline-flex items-center px-4 py-2 text-sm text-cugini-golden border border-cugini-golden hover:bg-cugini-golden hover:text-white transition-colors rounded-none group">
+        <span>View Size Chart</span>
+        <ChevronRightIcon className="ml-2 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+      </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="mb-6">
           <DialogTitle className="text-xl font-serif">{chartData.title}</DialogTitle>

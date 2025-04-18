@@ -84,6 +84,36 @@ exports.login = async (req, res) => {
 };
 
 exports.getMe = async (req, res) => {
-  const user = req.user;
-  res.status(200).json({ status: 'success', data: { user } });
+  try {
+    const userId = req.user.id;
+    
+    // Get user with wishlist information
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        wishlist: {
+          include: {
+            items: {
+              include: {
+                product: {
+                  include: {
+                    images: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ status: 'fail', message: 'User not found' });
+    }
+
+    res.status(200).json({ status: 'success', data: { user } });
+  } catch (err) {
+    console.error('Get User Profile Error:', err);
+    res.status(500).json({ status: 'fail', message: err.message });
+  }
 };

@@ -5,31 +5,10 @@ import Autoplay from "embla-carousel-autoplay";
 
 const products = [
   {
-    id: 1,
-    name: "Black Borgia",
+    id: "977b2a15-ecb6-4f25-b7ef-de0fd181bb00",
+    name: "paladio forza",
     price: 900.0,
-    image: "/images/IMG-20250403-WA0018.jpg",
-    category: "Men",
-  },
-  {
-    id: 2,
-    name: " SFORZA Beige pinstriped pants",
-    price: 189.99,
-    image: "/images/IMG-20250403-WA0013.jpg",
-    category: "Women",
-  },
-  {
-    id: 3,
-    name: "PALLADIO Tailored pants",
-    price: 249.99,
-    image: "/images/IMG-20250403-WA0011.jpg",
-    category: "Men",
-  },
-  {
-    id: "1b17fbb5-b889-480e-b00f-a82abd703c61",
-    name: "PALLADIO Tailored pants",
-    price: 249.99,
-    image: "/images/DSC00400.jpg",
+    image: "/uploads/1744894255850-DSC00411.jpg",
     category: "Men",
   },
 ];

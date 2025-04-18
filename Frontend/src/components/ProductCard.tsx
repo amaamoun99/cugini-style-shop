@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Eye } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import QuickViewModal from './QuickViewModal';
+import WishlistButton from './WishlistButton';
 
 interface ProductCardProps {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   category: string;
-  hoverImage?: string; // Optional second image for hover effect
-  sizes?: string[]; // Add sizes property
+  hoverImage?: string;
+  sizes?: string[];
 }
 
+
+
 const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: ProductCardProps) => {
+  console.log("ProductCard Props:", { id, name, price, image, category, hoverImage, sizes });
   // Use default image as hover image if none provided
   const secondaryImage = hoverImage || image;
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-  
-  const toggleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
-  };
   
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -37,7 +34,7 @@ const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: Pr
         <div className="product-image-container relative overflow-hidden">
           {/* Primary image */}
           <img 
-            src={image}
+            src={`http://localhost:3000${image}`}
             alt={name}
             loading="lazy"
             className="product-image w-full h-[500px] object-cover transition-opacity duration-700 ease-in-out"
@@ -45,7 +42,7 @@ const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: Pr
           
           {/* Hover image with overlay */}
           <img 
-            src={secondaryImage}
+            src={`http://localhost:3000${secondaryImage}`}
             alt={`${name} hover`}
             className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"
           />
@@ -70,16 +67,8 @@ const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: Pr
         </div>
       </Link>
       
-      {/* Wishlist button */}
-      <button 
-        onClick={toggleWishlist}
-        className="absolute top-4 right-4 p-2 bg-white/80 rounded-full shadow-md hover:bg-cugini-golden hover:text-white transition-colors"
-        aria-label="Add to wishlist"
-      >
-        <Heart 
-          className={`h-5 w-5 ${isWishlisted ? 'fill-cugini-golden text-cugini-golden' : 'text-gray-600'}`}
-        />
-      </button>
+      {/* Use the separate WishlistButton component */}
+      <WishlistButton productId={id} productName={name} />
       
       {/* Quick View Modal */}
       <QuickViewModal

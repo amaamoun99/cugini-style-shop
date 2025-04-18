@@ -3,7 +3,7 @@ import React from 'react';
 import ProductCard from './ProductCard';
 
 interface BestSellerCardProps {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;

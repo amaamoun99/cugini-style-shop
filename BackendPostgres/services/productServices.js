@@ -55,47 +55,65 @@ class ProductService {
     });
   }
 
-  // Helper method to find or create a collection
-  async _findOrCreateCollection(tx, collection) {
-    const existingCollection = await tx.collection.findUnique({
-      where: { slug: collection.slug },
-    });
+// Helper to slugify a string
+_slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-");
+}
 
-    if (existingCollection) {
-      console.log("Collection already exists:", existingCollection.id);
-      return existingCollection.id;
-    } else if (collection.name && collection.slug) {
-      const newCollection = await tx.collection.create({
-        data: {
-          name: collection.name,
-          slug: collection.slug,
-        },
-      });
-      return newCollection.id;
-    }
-    return null;
+// Helper method to find or create a collection
+async _findOrCreateCollection(tx, collectionName) {
+  const slug = this._slugify(collectionName);
+
+  const existingCollection = await tx.collection.findUnique({
+    where: { slug },
+  });
+
+  if (existingCollection) {
+    console.log("Collection already exists:", existingCollection.id);
+    return existingCollection.id;
   }
 
-  // Helper method to find or create a category
-  async _findOrCreateCategory(tx, category) {
-    console.log("Finding or creating category:", category);
-    const existingCategory = await tx.category.findUnique({
-      where: { slug: category.slug },
-    });
+  const newCollection = await tx.collection.create({
+    data: {
+      name: collectionName,
+      slug,
+    },
+  });
 
-    if (existingCategory) {
-      return existingCategory.id;
-    } else if (category.name && category.slug) {
-      const newCategory = await tx.category.create({
-        data: {
-          name: category.name,
-          slug: category.slug,
-        },
-      });
-      return newCategory.id;
-    }
-    return null;
+  console.log("Created new collection:", newCollection.id);
+  return newCollection.id;
+}
+
+// Helper method to find or create a category
+async _findOrCreateCategory(tx, categoryName) {
+  const slug = this._slugify(categoryName);
+
+  const existingCategory = await tx.category.findUnique({
+    where: { slug },
+  });
+
+  if (existingCategory) {
+    console.log("Category already exists:", existingCategory.id);
+    return existingCategory.id;
   }
+
+  const newCategory = await tx.category.create({
+    data: {
+      name: categoryName,
+      slug,
+    },
+  });
+
+  console.log("Created new category:", newCategory.id);
+  return newCategory.id;
+}
+
 
   // Helper method to create product variants
   async _createProductVariants(tx, productId, variants) {

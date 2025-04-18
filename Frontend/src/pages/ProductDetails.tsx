@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useCart } from "@/contexts/CartContext";
 import { useParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -11,8 +12,10 @@ import {
   Share2,
   ZoomIn,
   X,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -20,20 +23,21 @@ import { format, addDays } from "date-fns";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getProductById } from "@/api/product";
-import axios from 'axios';
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const [selectedImage, setSelectedImage] = useState(0);
+  const [error, setError] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
+  const { addItem } = useCart();
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [sizes, setSizes] = useState([]);
+  const [variantStockMap, setVariantStockMap] = useState({});
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const isMobile = useIsMobile();
   const { toast } = useToast();
@@ -62,14 +66,23 @@ const ProductDetails = () => {
           ];
           console.log("sizes", sizes);
           setSizes(sizes);
-          setSelectedSize(""); // Set default size to the first available size"");
+          
+          // Create a mapping of size to stock for easy lookup
+          const stockMap = {};
+          productData.variants.forEach(variant => {
+            stockMap[variant.size] = variant.stock;
+          });
+          setVariantStockMap(stockMap);
+          
+          // Set default size to first available size with stock > 0
+          const availableSize = sizes.find(size => stockMap[size] > 0);
+          setSelectedSize(availableSize || "");
         }
 
         // Rest of your code...
         setLoading(false);
       } catch (err) {
         console.error("Error fetching product:", err);
-        setError("Failed to load product. Please try again later.");
         setLoading(false);
       }
     };
@@ -95,6 +108,18 @@ const ProductDetails = () => {
     }
   }, [id]);
 
+  // Get the current variant's stock based on selected size
+  const getCurrentVariantStock = () => {
+    if (!selectedSize || !variantStockMap[selectedSize]) return 0;
+    return variantStockMap[selectedSize];
+  };
+
+  // Check if selected variant has sufficient stock for requested quantity
+  const hasSufficientStock = () => {
+    const currentStock = getCurrentVariantStock();
+    return currentStock >= quantity;
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen">
@@ -110,7 +135,7 @@ const ProductDetails = () => {
     );
   }
 
-  if (error || !product) {
+  if (!product) {
     return (
       <div className="flex flex-col min-h-screen">
         <Navbar />
@@ -120,7 +145,7 @@ const ProductDetails = () => {
               Product Not Found
             </h2>
             <p className="text-gray-600 mb-6">
-              {error || "We couldn't find the product you're looking for."}
+              We couldn't find the product you're looking for.
             </p>
             <Button asChild>
               <a href="/shop">Continue Shopping</a>
@@ -151,40 +176,67 @@ const ProductDetails = () => {
 
   const handleAddToCart = async () => {
     try {
-      // Find the selected variant based on size
-      const selectedVariant = product.variants.find(v => v.size === selectedSize);
+      setIsAddingToCart(true);
       
+      // Find the selected variant based on size
+      const selectedVariant = product.variants.find(
+        (v) => v.size === selectedSize
+      );
+
       if (!selectedVariant) {
         toast({
           title: "Error",
           description: "Please select a size",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
-  
-      await axios.post(`http://localhost:3000/api/v1/cart/items`, {
-        variantId: selectedVariant.id,
-        quantity: quantity
-      });
-  
+
+      // Check stock before adding to cart
+      if (selectedVariant.stock < quantity) {
+        toast({
+          title: "Insufficient Stock",
+          description: `Only ${selectedVariant.stock} units available.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Use CartContext addItem method instead of direct API call
+      await addItem(selectedVariant.id, quantity);
+
       toast({
         title: "Added to Cart",
         description: `${quantity} × ${product.name} (${selectedSize}) added to your cart.`,
       });
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      toast({
-        title: "Error",
-        description: "Failed to add item to cart. Please try again.",
-        variant: "destructive"
-      });
+      if (error.response && error.response.data && error.response.data.message) {
+        toast({
+          title: "Error",
+          description: error.response.data.message,
+          variant: "destructive",
+        });
+      } else {
+        console.error("Error adding to cart:", error);
+        toast({
+          title: "Error",
+          description: "Failed to add item to cart. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setIsAddingToCart(false);
     }
   };
-  
+
   const handleBuyNow = async () => {
-    await handleAddToCart();
-    window.location.href = "/checkout";
+    try {
+      await handleAddToCart();
+      // Only redirect if add to cart was successful
+      window.location.href = "/checkout";
+    } catch (error) {
+      // Error is already handled in handleAddToCart
+    }
   };
 
   const decrementQuantity = () => {
@@ -194,7 +246,16 @@ const ProductDetails = () => {
   };
 
   const incrementQuantity = () => {
-    setQuantity(quantity + 1);
+    const currentStock = getCurrentVariantStock();
+    if (quantity < currentStock) {
+      setQuantity(quantity + 1);
+    } else {
+      toast({
+        title: "Maximum Stock Reached",
+        description: `Only ${currentStock} units available.`,
+        variant: "destructive",
+      });
+    }
   };
 
   const handleShare = async () => {
@@ -254,7 +315,7 @@ const ProductDetails = () => {
       </div>
       <div className="p-4 max-w-full max-h-full overflow-auto">
         <img
-          src={productImages[selectedImage]}
+          src={`http://localhost:3000${productImages[selectedImage]}`}
           alt={product.name}
           className="max-w-full max-h-full object-contain"
         />
@@ -264,6 +325,12 @@ const ProductDetails = () => {
 
   // Get category name - this will need to be updated based on your data structure
   const categoryName = product.categoryId ? "Products" : "";
+  
+  // Check if selected size is out of stock
+  const isSelectedSizeOutOfStock = selectedSize ? variantStockMap[selectedSize] <= 0 : false;
+  
+  // Check if any size is available (with stock > 0)
+  const hasAnySizeInStock = Object.values(variantStockMap).some(stock => stock > 0);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -276,7 +343,7 @@ const ProductDetails = () => {
               <div className="relative aspect-square overflow-hidden mb-4">
                 {productImages.length > 0 ? (
                   <img
-                    src={productImages[selectedImage]}
+                    src={`http://localhost:3000${productImages[selectedImage]}`}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
@@ -310,7 +377,7 @@ const ProductDetails = () => {
                       onClick={() => setSelectedImage(index)}
                     >
                       <img
-                        src={image}
+                        src={`http://localhost:3000${image}`}
                         alt={`${product.name} view ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
@@ -349,22 +416,47 @@ const ProductDetails = () => {
                 <div className="mb-6">
                   <h3 className="font-medium text-cugini-dark mb-2">
                     Size: <span className="font-normal">{selectedSize}</span>
+                    {selectedSize && (
+                      <span className="ml-2 text-sm">
+                        ({variantStockMap[selectedSize] || 0} in stock)
+                      </span>
+                    )}
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {sizes.map((size) => (
-                      <button
-                        key={size}
-                        className={`w-12 h-12 flex items-center justify-center border ${
-                          selectedSize === size
-                            ? "border-cugini-golden bg-cugini-dark text-white"
-                            : "border-gray-300 text-cugini-dark hover:border-cugini-golden"
-                        } transition-colors`}
-                        onClick={() => setSelectedSize(size)}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {sizes.map((size) => {
+                      const isOutOfStock = variantStockMap[size] <= 0;
+                      return (
+                        <button
+                          key={size}
+                          className={`w-12 h-12 flex items-center justify-center border relative
+                            ${selectedSize === size
+                              ? "border-cugini-golden bg-cugini-dark text-white"
+                              : isOutOfStock
+                                ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
+                                : "border-gray-300 text-cugini-dark hover:border-cugini-golden"
+                            } transition-colors`}
+                          onClick={() => !isOutOfStock && setSelectedSize(size)}
+                          disabled={isOutOfStock}
+                          aria-label={isOutOfStock ? `Size ${size} - Out of stock` : `Select size ${size}`}
+                        >
+                          {size}
+                          {isOutOfStock && (
+                            <span className="absolute inset-0 flex items-center justify-center">
+                              <div className="absolute inset-0 border-t border-gray-400 rotate-45"></div>
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
+                  
+                  {!hasAnySizeInStock && (
+                    <div className="flex items-center mt-3 text-red-500">
+                      <AlertCircle className="h-4 w-4 mr-1" />
+                      <p className="text-sm">All sizes are currently out of stock</p>
+                    </div>
+                  )}
+                  
                   <p className="text-sm text-gray-500 mt-2">
                     <SizeChart category={categoryName} />
                   </p>
@@ -375,9 +467,12 @@ const ProductDetails = () => {
                 <h3 className="font-medium text-cugini-dark mb-2">Quantity:</h3>
                 <div className="flex items-center border border-gray-300 w-fit">
                   <button
-                    className="px-3 py-2 text-gray-500 hover:text-cugini-dark"
+                    className={`px-3 py-2 ${
+                      quantity <= 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-500 hover:text-cugini-dark"
+                    }`}
                     onClick={decrementQuantity}
                     aria-label="Decrease quantity"
+                    disabled={quantity <= 1}
                   >
                     <Minus className="h-4 w-4" />
                   </button>
@@ -387,32 +482,59 @@ const ProductDetails = () => {
                   </span>
 
                   <button
-                    className="px-3 py-2 text-gray-500 hover:text-cugini-dark"
+                    className={`px-3 py-2 ${
+                      !selectedSize || quantity >= getCurrentVariantStock()
+                        ? "text-gray-300 cursor-not-allowed"
+                        : "text-gray-500 hover:text-cugini-dark"
+                    }`}
                     onClick={incrementQuantity}
                     aria-label="Increase quantity"
+                    disabled={!selectedSize || quantity >= getCurrentVariantStock()}
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
+                
+                {selectedSize && variantStockMap[selectedSize] > 0 && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    {variantStockMap[selectedSize] <= 5 ? (
+                      <span className="text-amber-600">
+                        Only {variantStockMap[selectedSize]} left in stock!
+                      </span>
+                    ) : (
+                      <span>In stock</span>
+                    )}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   onClick={handleBuyNow}
-                  className="flex-1 bg-cugini-golden hover:bg-cugini-dark text-white py-3 px-8 transition-colors"
+                  className={`flex-1 bg-cugini-golden hover:bg-cugini-dark text-white py-3 px-8 transition-colors`}
+                  disabled={!selectedSize || isSelectedSizeOutOfStock || !hasSufficientStock()}
                 >
                   <ShoppingBag className="mr-2 h-5 w-5" />
                   Buy Now
                 </Button>
 
-                <Button
-                  variant="outline"
-                  onClick={handleAddToCart}
+                <LoadingButton
                   className="flex-1 border border-gray-300 hover:border-cugini-golden py-3 px-8 transition-colors"
+                  onClick={handleAddToCart}
+                  isLoading={isAddingToCart}
+                  loadingText="Adding..."
+                  disabled={!selectedSize || isSelectedSizeOutOfStock || !hasSufficientStock()}
                 >
                   Add to Cart
-                </Button>
+                </LoadingButton>
               </div>
+              
+              {isSelectedSizeOutOfStock && selectedSize && (
+                <div className="flex items-center mt-3 text-red-500">
+                  <AlertCircle className="h-5 w-5 mr-2" />
+                  <p>Selected size is out of stock</p>
+                </div>
+              )}
 
               <button
                 className="flex items-center text-gray-500 hover:text-cugini-dark mt-4"
@@ -440,12 +562,6 @@ const ProductDetails = () => {
                   className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
                 >
                   Care Instructions
-                </TabsTrigger>
-                <TabsTrigger
-                  value="sizing"
-                  className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
-                >
-                  Size Guide
                 </TabsTrigger>
               </TabsList>
 
@@ -478,21 +594,11 @@ const ProductDetails = () => {
                   </p>
                 </div>
               </TabsContent>
-
-              <TabsContent value="sizing" className="mt-0">
-                <div className="max-w-3xl mx-auto">
-                  <h2 className="text-2xl font-serif text-cugini-dark mb-4">
-                    Size Guide
-                  </h2>
-                  <div className="bg-white border border-gray-200 rounded-md p-6">
-                    <SizeChart category={categoryName} />
-                  </div>
-                </div>
-              </TabsContent>
             </Tabs>
           </div>
         </div>
 
+        {/* related products */}
         {relatedProducts.length > 0 && (
           <div className="container-custom py-16">
             <h2 className="text-2xl md:text-3xl font-serif text-cugini-dark text-center mb-8">

@@ -7,19 +7,47 @@ const { v4: uuidv4 } = require("uuid");
 
 exports.getOrderDetails = async function (req, res) {
   const { id } = req.params;
-  try {
-    const order = await orderService.getOrderById(id);
+  console.log("Fetch order details - ID:", id);
+  console.log("Fetch order details - User:", req.user);
+  
+  // Validate we have an ID
+  if (!id) {
+    return res.status(400).json({ 
+      status: "fail", 
+      message: "Order ID is required" 
+    });
+  }
 
-    if (!order || order.userId !== req.user.id) {
-      return res
-        .status(404)
-        .json({ status: "fail", message: "Order not found" });
+  try {
+    // Get the order
+    const order = await orderService.getOrderById(id);
+    console.log("Order found:", order ? "Yes" : "No");
+
+    // Check if order exists
+    if (!order) {
+      return res.status(404).json({ 
+        status: "fail", 
+        message: "Order not found" 
+      });
+    }
+    
+    // For guest orders or when handling checkout completion, don't check user ID
+    // This allows the frontend to fetch order details right after checkout
+    if (req.user && order.userId && order.userId !== req.user.id) {
+      return res.status(403).json({ 
+        status: "fail", 
+        message: "Not authorized to view this order" 
+      });
     }
 
     res.json({ status: "success", data: order });
   } catch (err) {
     console.error("Order Details Error:", err);
-    res.status(500).json({ status: "fail", message: "Could not fetch order" });
+    res.status(500).json({ 
+      status: "fail", 
+      message: "Could not fetch order",
+      error: err.message
+    });
   }
 };
 

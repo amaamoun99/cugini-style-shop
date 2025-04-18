@@ -1,12 +1,16 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MenuIcon, ShoppingCart, Search, User, X, Heart } from 'lucide-react';
+import { MenuIcon, ShoppingCart, Search, User, UserPlus, X, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { cartCount } = useCart();
+  const { user } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -52,14 +56,14 @@ const Navbar = () => {
 
           {/* Right Icons */}
           <div className="flex items-center space-x-4">
-            <Button 
+            {/* <Button 
               variant="ghost" 
               size="icon" 
               onClick={toggleSearch}
               aria-label="Search"
             >
               <Search className="h-5 w-5 text-cugini-dark" />
-            </Button>
+            </Button> */}
             {/* <Link to="/wishlist">
               <Button 
                 variant="ghost" 
@@ -78,6 +82,20 @@ const Navbar = () => {
                 <User className="h-5 w-5 text-cugini-dark" />
               </Button>
             </Link> */}
+            {/* User/Register Icon */}
+            {user ? (
+              <Link to="/profile">
+                <Button variant="ghost" size="icon" aria-label="Profile">
+                  <User className="h-5 w-5 text-cugini-dark" />
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/register">
+                <Button variant="ghost" size="icon" aria-label="Register">
+                  <UserPlus className="h-5 w-5 text-cugini-dark" />
+                </Button>
+              </Link>
+            )}
             <Link to="/cart">
               <Button 
                 variant="ghost" 
@@ -86,7 +104,11 @@ const Navbar = () => {
                 className="relative"
               >
                 <ShoppingCart className="h-5 w-5 text-cugini-dark" />
-                <span className="absolute -top-1 -right-1 bg-cugini-golden text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">2</span>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-cugini-golden text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
               </Button>
             </Link>
           </div>
@@ -131,11 +153,8 @@ const Navbar = () => {
           </div>
           <nav className="container py-8 flex flex-col space-y-4">
             <Link to="/" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Home</Link>
-            <Link to="/shop/men" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Men</Link>
-            <Link to="/shop/women" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Women</Link>
             <Link to="/shop" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Shop All</Link>
-            <Link to="/new-arrivals" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>New Arrivals</Link>
-            <Link to="/sale" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Sale</Link>
+            <Link to="/about" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>our story</Link>
             <Link to="/cart" className="nav-link text-xl py-2 border-b border-gray-100" onClick={toggleMenu}>Cart</Link>
           </nav>
         </div>

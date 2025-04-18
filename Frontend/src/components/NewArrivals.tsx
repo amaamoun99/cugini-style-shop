@@ -6,37 +6,13 @@ import ProductCard from './ProductCard';
 // Updated product data with hover images
 const products = [
   {
-    id: 5,
-    name: 'Striped Linen Shirt',
-    price: 149.99,
-    image: '/images/DSC00399.jpg',
-    hoverImage: '/images/DSC00400.jpg',
-    category: 'Men'
+    id: "977b2a15-ecb6-4f25-b7ef-de0fd181bb00",
+    name: "paladio forza",
+    price: 900.0,
+    image: "/uploads/1744894255850-DSC00411.jpg",
+    hoverImage:"/uploads/1744894255870-DSC00410.jpg",
+    category: "Men",
   },
-  {
-    id: 6,
-    name: 'Silk Blouse',
-    price: 169.99,
-    image: '/images/IMG-20250403-WA0009.jpg',
-    hoverImage: '/images/IMG-20250403-WA0010.jpg',
-    category: 'Women'
-  },
-  {
-    id: 7,
-    name: 'Cotton Chino Pants',
-    price: 129.99,
-    image: '/images/IMG-20250403-WA0012.jpg',
-    hoverImage: '/images/IMG-20250403-WA0016.jpg',
-    category: 'Men'
-  },
-  {
-    id: 8,
-    name: 'Leather Handbag',
-    price: 219.99,
-    image: '/images/IMG-20250403-WA0013.jpg',
-    hoverImage: '/images/IMG-20250403-WA0014.jpg',
-    category: 'Women'
-  }
 ];
 
 const NewArrivals = () => {

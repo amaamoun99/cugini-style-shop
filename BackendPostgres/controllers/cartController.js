@@ -4,9 +4,9 @@ const getCart = async (req, res) => {
   try {
     // 🛠️ Get cart identity from middleware
     console.log("🎯 cartController.getCart reached");
-    console.log("🛒 Cart identity:", req.cartIdentity); 
+    console.log("🛒 Cart identity:", req.cartIdentity);
     const cart = await cartService.getOrCreateCart(req.cartIdentity);
-    console.log('✅ Got cart:', cart);
+    console.log("✅ Got cart:", cart);
     res.json(cart);
   } catch (error) {
     res.status(500).json({
