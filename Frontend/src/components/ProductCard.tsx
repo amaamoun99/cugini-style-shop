@@ -18,6 +18,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: ProductCardProps) => {
   console.log("ProductCard Props:", { id, name, price, image, category, hoverImage, sizes });
+  console.log("VITE_BASE_URL:", import.meta.env.VITE_BASE_URL);
   // Use default image as hover image if none provided
   const secondaryImage = hoverImage || image;
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
@@ -34,7 +35,7 @@ const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: Pr
         <div className="product-image-container relative overflow-hidden">
           {/* Primary image */}
           <img 
-            src={`http://localhost:3000${image}`}
+            src={`${import.meta.env.VITE_BASE_URL}${image}`}
             alt={name}
             loading="lazy"
             className="product-image w-full h-[500px] object-cover transition-opacity duration-700 ease-in-out"
@@ -42,7 +43,7 @@ const ProductCard = ({ id, name, price, image, category, hoverImage, sizes }: Pr
           
           {/* Hover image with overlay */}
           <img 
-            src={`http://localhost:3000${secondaryImage}`}
+            src={`${import.meta.env.VITE_BASE_URL}${secondaryImage}`}
             alt={`${name} hover`}
             className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"
           />

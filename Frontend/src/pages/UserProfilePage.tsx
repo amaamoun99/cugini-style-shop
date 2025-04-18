@@ -156,7 +156,7 @@ const UserProfilePage: React.FC = () => {
                   <li key={product.id || product.productId} className="flex items-center py-2">
                     {product.images && product.images[0] && (
                       <img 
-                        src={`http://localhost:3000${product.images[0]}`} 
+                        src={`${import.meta.env.VITE_BASE_URL}${product.images[0]}`}  
                         alt={product.name} 
                         className="w-12 h-12 object-cover rounded mr-4" 
                       />
@@ -217,7 +217,7 @@ const UserProfilePage: React.FC = () => {
                         </div>
                       </div>
                       <span className="font-bold text-cugini-golden text-lg mt-2 sm:mt-0">
-                        ${parseFloat(order.total.toString()).toFixed(2)}
+                        ${parseFloat(order.totalAmount?.toString() || '0').toFixed(2)}
                       </span>
                     </div>
                     

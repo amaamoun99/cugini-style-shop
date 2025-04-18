@@ -162,7 +162,7 @@ const CartPage = () => {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="sm:w-24 sm:h-24 flex-shrink-0">
                           <img
-                            src={`http://localhost:3000${item.variant.product.images[0].url}`}
+                            src={`import.meta.env.VITE_BASE_URL${item.variant.product.images[0].url}`}
                             alt={item.variant.product.name}
                             className="w-full h-full object-cover"
                           />

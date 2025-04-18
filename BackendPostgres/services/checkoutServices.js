@@ -54,7 +54,8 @@ exports.createOrder = async function (
   paymentMethod,
   email,
   phoneNumber,
-  guestName
+  guestName,
+  userId
 ) {
   return prisma.$transaction(async (tx) => {
     try {
@@ -78,21 +79,25 @@ exports.createOrder = async function (
       const shipping = 30;
       const total = subtotal + shipping;
   
+      // Determine the user ID for this order - use authenticated userId if provided, otherwise try cart.userId
+      const authenticatedUserId = userId || cart.userId;
+      console.log('Creating order with userId:', authenticatedUserId || 'Guest order');
+      
       // Create address first
       const newAddress = await tx.address.create({
         data: {
-          userId: cart.userId,
+          userId: authenticatedUserId,
           ...shippingAddress,
         },
       });
-  
+      
       // Create order
       const createdOrder = await tx.order.create({
         data: {
-          userId: cart.userId,
-          guestEmail: cart.userId ? null : email,
-          guestPhone: cart.userId ? null : phoneNumber,
-          guestName: cart.userId ? null : guestName,
+          userId: authenticatedUserId, // Use the authenticated user ID if provided
+          guestEmail: authenticatedUserId ? null : email,
+          guestPhone: authenticatedUserId ? null : phoneNumber,
+          guestName: authenticatedUserId ? null : guestName,
           addressId: newAddress.id,
           totalAmount: total,
           status: "pending",

@@ -315,7 +315,7 @@ const ProductDetails = () => {
       </div>
       <div className="p-4 max-w-full max-h-full overflow-auto">
         <img
-          src={`http://localhost:3000${productImages[selectedImage]}`}
+          src={`${import.meta.env.VITE_BASE_URL}${productImages[selectedImage]}`}
           alt={product.name}
           className="max-w-full max-h-full object-contain"
         />
@@ -343,7 +343,7 @@ const ProductDetails = () => {
               <div className="relative aspect-square overflow-hidden mb-4">
                 {productImages.length > 0 ? (
                   <img
-                    src={`http://localhost:3000${productImages[selectedImage]}`}
+                    src={`${import.meta.env.VITE_BASE_URL}${productImages[selectedImage]}`}
                     alt={product.name}
                     className="w-full h-full object-cover"
                   />
@@ -377,7 +377,7 @@ const ProductDetails = () => {
                       onClick={() => setSelectedImage(index)}
                     >
                       <img
-                        src={`http://localhost:3000${image}`}
+                        src={`${import.meta.env.VITE_BASE_URL}${image}`}
                         alt={`${product.name} view ${index + 1}`}
                         className="w-full h-full object-cover"
                       />

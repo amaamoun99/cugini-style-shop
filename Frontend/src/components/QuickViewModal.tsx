@@ -267,7 +267,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
       <div className="relative bg-gray-50 h-full min-h-[300px] md:min-h-[400px] flex items-center justify-center">
         {productImages.length > 0 ? (
           <img
-            src={`http://localhost:3000${productImages[selectedImage]}`}
+            src={`import.meta.env.VITE_BASE_URL${productImages[selectedImage]}`}
             alt={product.name}
             className="w-full h-full object-cover"
           />
