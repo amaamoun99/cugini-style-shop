@@ -66,14 +66,14 @@ const ProductDetails = () => {
           ];
           console.log("sizes", sizes);
           setSizes(sizes);
-          
+
           // Create a mapping of size to stock for easy lookup
           const stockMap = {};
           productData.variants.forEach(variant => {
             stockMap[variant.size] = variant.stock;
           });
           setVariantStockMap(stockMap);
-          
+
           // Set default size to first available size with stock > 0
           const availableSize = sizes.find(size => stockMap[size] > 0);
           setSelectedSize(availableSize || "");
@@ -165,8 +165,8 @@ const ProductDetails = () => {
     ? typeof product.details === "string"
       ? [product.details]
       : Array.isArray(product.details)
-      ? product.details
-      : []
+        ? product.details
+        : []
     : [];
 
   // Format images correctly - API returns array of objects with url property
@@ -177,7 +177,7 @@ const ProductDetails = () => {
   const handleAddToCart = async () => {
     try {
       setIsAddingToCart(true);
-      
+
       // Find the selected variant based on size
       const selectedVariant = product.variants.find(
         (v) => v.size === selectedSize
@@ -325,10 +325,10 @@ const ProductDetails = () => {
 
   // Get category name - this will need to be updated based on your data structure
   const categoryName = product.categoryId ? "Products" : "";
-  
+
   // Check if selected size is out of stock
   const isSelectedSizeOutOfStock = selectedSize ? variantStockMap[selectedSize] <= 0 : false;
-  
+
   // Check if any size is available (with stock > 0)
   const hasAnySizeInStock = Object.values(variantStockMap).some(stock => stock > 0);
 
@@ -369,11 +369,10 @@ const ProductDetails = () => {
                   {productImages.map((image, index) => (
                     <button
                       key={index}
-                      className={`relative w-24 h-24 border-2 ${
-                        selectedImage === index
-                          ? "border-cugini-golden"
-                          : "border-transparent"
-                      }`}
+                      className={`relative w-24 h-24 border-2 ${selectedImage === index
+                        ? "border-cugini-golden"
+                        : "border-transparent"
+                        }`}
                       onClick={() => setSelectedImage(index)}
                     >
                       <img
@@ -449,14 +448,14 @@ const ProductDetails = () => {
                       );
                     })}
                   </div>
-                  
+
                   {!hasAnySizeInStock && (
                     <div className="flex items-center mt-3 text-red-500">
                       <AlertCircle className="h-4 w-4 mr-1" />
                       <p className="text-sm">All sizes are currently out of stock</p>
                     </div>
                   )}
-                  
+
                   <p className="text-sm text-gray-500 mt-2">
                     <SizeChart category={categoryName} />
                   </p>
@@ -467,9 +466,8 @@ const ProductDetails = () => {
                 <h3 className="font-medium text-cugini-dark mb-2">Quantity:</h3>
                 <div className="flex items-center border border-gray-300 w-fit">
                   <button
-                    className={`px-3 py-2 ${
-                      quantity <= 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-500 hover:text-cugini-dark"
-                    }`}
+                    className={`px-3 py-2 ${quantity <= 1 ? "text-gray-300 cursor-not-allowed" : "text-gray-500 hover:text-cugini-dark"
+                      }`}
                     onClick={decrementQuantity}
                     aria-label="Decrease quantity"
                     disabled={quantity <= 1}
@@ -482,11 +480,10 @@ const ProductDetails = () => {
                   </span>
 
                   <button
-                    className={`px-3 py-2 ${
-                      !selectedSize || quantity >= getCurrentVariantStock()
-                        ? "text-gray-300 cursor-not-allowed"
-                        : "text-gray-500 hover:text-cugini-dark"
-                    }`}
+                    className={`px-3 py-2 ${!selectedSize || quantity >= getCurrentVariantStock()
+                      ? "text-gray-300 cursor-not-allowed"
+                      : "text-gray-500 hover:text-cugini-dark"
+                      }`}
                     onClick={incrementQuantity}
                     aria-label="Increase quantity"
                     disabled={!selectedSize || quantity >= getCurrentVariantStock()}
@@ -494,7 +491,7 @@ const ProductDetails = () => {
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
-                
+
                 {selectedSize && variantStockMap[selectedSize] > 0 && (
                   <p className="text-sm text-gray-500 mt-2">
                     {variantStockMap[selectedSize] <= 5 ? (
@@ -528,7 +525,7 @@ const ProductDetails = () => {
                   Add to Cart
                 </LoadingButton>
               </div>
-              
+
               {isSelectedSizeOutOfStock && selectedSize && (
                 <div className="flex items-center mt-3 text-red-500">
                   <AlertCircle className="h-5 w-5 mr-2" />
@@ -563,6 +560,12 @@ const ProductDetails = () => {
                 >
                   Care Instructions
                 </TabsTrigger>
+                <TabsTrigger
+                  value="shipping"
+                  className="data-[state=active]:border-b-2 data-[state=active]:border-cugini-golden hover:text-cugini-golden px-6 py-2"
+                >
+                  Shipping & Returns
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="description" className="mt-0">
@@ -577,9 +580,16 @@ const ProductDetails = () => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-gray-600">
-                      Product details not available.
-                    </p>
+                    <ul className="space-y-2 mb-8 list-disc pl-5 text-gray-600">
+                      <li>Expertly Tailored Silhouette: Features elegant front pleats that create a sophisticated drape and relaxed fit through the legs while maintaining a clean profile</li>
+                      <li>Premium Italian Fabric: Crafted from high-quality light gray wool blend fabric with a subtle texture that balances refinement with durability</li>
+                      <li>Classic High-Rise Design: Sits at the natural waist for a timeless, flattering look that pairs perfectly with both casual and formal tops</li>
+                      <li>Versatile Styling Potential: Wide-leg cut with a slight break at the ankle offers both comfort and sophistication, suitable for business settings or elevated casual wear</li>
+                      <li>Meticulous Construction: Single button closure with extended tab and zip fly demonstrates attention to detail and traditional craftsmanship</li>
+                      <li>Thoughtful Details: Side slash pockets and back welt pockets maintain the clean lines while providing functionality</li>
+                      <li>Superior Comfort: The looser fit through hip and thigh ensures all-day wearability without sacrificing style</li>
+                      <li>Seasonless Appeal: Medium-weight fabric makes these pants suitable for year-round wear when properly layered</li>
+                    </ul>
                   )}
                 </div>
               </TabsContent>
@@ -590,8 +600,46 @@ const ProductDetails = () => {
                     Care Instructions
                   </h2>
                   <p className="text-gray-600">
-                    {product.care || "Care instructions not available."}
+                    <strong>Washing</strong>
+                    <ul className="list-disc list-inside mb-4">
+                      <li>Machine wash cold on gentle cycle</li>
+                      <li>Use mild detergent only</li>
+                      <li>Turn pants inside out before washing</li>
+                      <li>Wash with similar colors</li>
+                      <li>Do not use bleach or harsh cleaning agents</li>
+                    </ul>
+                    <strong>Drying</strong>
+                    <ul className="list-disc list-inside mb-4">
+                      <li>Hang dry or lay flat to dry for best results</li>
+                      <li>If using a dryer, tumble dry on low heat</li>
+                      <li>Remove promptly when dry to prevent wrinkles</li>
+                    </ul>
+                    <strong>Ironing</strong>
+                    <ul className="list-disc list-inside">
+                      <li>Iron on medium heat if needed</li>
+                      <li>Use a pressing cloth for delicate fabrics</li>
+                      <li>Steam setting recommended for stubborn wrinkles</li>
+                    </ul>
                   </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="shipping" className="mt-0">
+                <div className="max-w-3xl mx-auto">
+
+                  <h3 className="text-xl font-semibold mt-4 mb-2">Return & Exchange Policy</h3>
+                  <p className="mb-2">At CUGINI, we are dedicated to delivering unparalleled craftsmanship and a seamless shopping experience. Should you require a return or exchange, our policy ensures a refined and efficient process.</p>
+                  <ul className="list-disc list-inside mb-4 text-gray-600">
+                    <li><strong>Returns & Exchanges:</strong> Accepted within 7 days of delivery, provided the item is unworn, unwashed, and in its original condition with all tags intact.</li>
+                    <li><strong>Exclusions:</strong> Personalized or altered items are not eligible for return or exchange.</li>
+                    <li><strong>Exchanges:</strong> Available for size or style adjustments, subject to stock availability.</li>
+                    <li><strong>Shipping:</strong> Orders are processed within 1-2 business days and delivered within 2-5 business days.</li>
+                    <li><strong>Return Shipping:</strong> Customers are responsible for return shipping costs unless the item is defective or incorrect.</li>
+                  </ul>
+                  <h3 className="text-xl font-semibold mb-2">How to Initiate a Return or Exchange</h3>
+                  <p className="mb-2">Please contact our team at <a href="tel:01201628408" className="text-cugini-golden underline">01201628408</a> or via Instagram DMs.</p>
+                  <div className="mb-2 font-serif italic">CUGINI – TAILORED FOR THE TIMELESS</div>
+                  <div className="mb-2">Phone: <a href="tel:01201628408" className="text-cugini-golden underline">01201628408</a></div>
+                  <div className="mb-2">Instagram: <a href="https://instagram.com/cugini.eg" target="_blank" rel="noopener noreferrer" className="text-cugini-golden underline">@cugini.eg</a></div>
                 </div>
               </TabsContent>
             </Tabs>

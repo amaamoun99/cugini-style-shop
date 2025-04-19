@@ -76,7 +76,7 @@ exports.createOrder = async function (
       for (let item of cart.items) {
         subtotal += item.quantity * item.variant.product.price;
       }
-      const shipping = 30;
+      const shipping = 75;
       const total = subtotal + shipping;
   
       // Determine the user ID for this order - use authenticated userId if provided, otherwise try cart.userId
@@ -95,9 +95,9 @@ exports.createOrder = async function (
       const createdOrder = await tx.order.create({
         data: {
           userId: authenticatedUserId, // Use the authenticated user ID if provided
-          guestEmail: authenticatedUserId ? null : email,
-          guestPhone: authenticatedUserId ? null : phoneNumber,
-          guestName: authenticatedUserId ? null : guestName,
+          guestEmail: email,
+          guestPhone: phoneNumber,
+          guestName: guestName,
           addressId: newAddress.id,
           totalAmount: total,
           status: "pending",

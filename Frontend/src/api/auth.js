@@ -21,11 +21,12 @@ export const login = async (email, password) => {
  * @param {string} name User's name
  * @param {string} email User's email
  * @param {string} password User's password
+ * @param {string} phoneNumber User's phone number (optional)
  * @returns {Promise<Object>} Response containing auth token
  */
-export const register = async (name, email, password) => {
+export const register = async (name, email, password, phoneNumber = '') => {
   try {
-    const response = await axiosInstance.post('/auth/register', { name, email, password });
+    const response = await axiosInstance.post('/auth/register', { name, email, password, phoneNumber });
     return response.data;
   } catch (error) {
     console.error('Registration error:', error.response?.data || error.message);

@@ -11,7 +11,7 @@ const createToken = (user) => {
 };
 
 exports.register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, phoneNumber } = req.body;
   
     // Basic validation
     if (!name || !email || !password) {
@@ -41,11 +41,12 @@ exports.register = async (req, res) => {
       console.log("Hashed password:", hashedPassword);
   
       // Create the user
-      const user = await prisma.user.create({
+      const user = await prisma.User.create({
         data: {
           name,
           email,
           password: hashedPassword,
+          phoneNumber: phoneNumber || "", // Add phone number, default to empty string if not provided
           // You can optionally set a default role here
           // role: 'user',
         },

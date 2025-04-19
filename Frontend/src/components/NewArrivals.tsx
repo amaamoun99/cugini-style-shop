@@ -3,19 +3,28 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 
-// Updated product data with hover images
-const products = [
-  {
-    id: "977b2a15-ecb6-4f25-b7ef-de0fd181bb00",
-    name: "paladio forza",
-    price: 900.0,
-    image: "/uploads/1744894255850-DSC00411.jpg",
-    hoverImage:"/uploads/1744894255870-DSC00410.jpg",
-    category: "Men",
-  },
-];
+
+
+import { useEffect, useState } from "react";
+import { getAllProducts } from "@/api/product";
 
 const NewArrivals = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const allProducts = await getAllProducts();
+        setProducts(allProducts.filter((p) => p.isNewArrival));
+      } catch (err) {
+        setProducts([]);
+      }
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
   return (
     <section className="py-16 bg-white">
       <div className="container-custom">
@@ -38,9 +47,9 @@ const NewArrivals = () => {
                 id={product.id}
                 name={product.name}
                 price={product.price}
-                image={product.image}
-                hoverImage={product.hoverImage}
-                category={product.category}
+                image={product.images?.[0]?.url}
+                hoverImage={product.images?.[1]?.url || product.images?.[0]?.url}
+                category={product.category?.name || ""}
               />
             ))}
           </div>

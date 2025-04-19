@@ -13,6 +13,7 @@ model User {
   email     String    @unique
   password  String
   name      String
+  phoneNumber String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   role      String    @default("user")
@@ -64,6 +65,9 @@ model Product {
   images        ProductImage[]
   variants      ProductVariant[]
   wishlistItems WishlistItem[]
+  isBestSeller  Boolean          @default(false)
+  isNewArrival  Boolean          @default(false)
+  isActive  Boolean          @default(false)
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 }

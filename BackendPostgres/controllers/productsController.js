@@ -36,6 +36,8 @@ exports.createProduct = async (req, res) => {
       category,
       collection,
       variants: variantsString,
+      isBestSeller = false,
+      isNewArrival = false,
     } = req.body;
 
     console.log('🧾 Body:', req.body);
@@ -51,6 +53,8 @@ exports.createProduct = async (req, res) => {
       collection,
       variants,
       images,
+      isBestSeller,
+      isNewArrival,
     });
 
     return res.status(201).json({ success: true, data: product });

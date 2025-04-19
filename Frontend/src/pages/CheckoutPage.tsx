@@ -11,6 +11,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent } from '@/components/ui/card';
 import { ChevronLeft, Truck } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { fetchUserProfile } from '@/api/user';
 
 interface CartItem {
   id: string;
@@ -37,7 +39,7 @@ const CheckoutPage: React.FC = () => {
     address: '',
     city: '',
     zipCode: '',
-    country: 'United States',
+    country: 'Egypt',
     phone: '',
   });
   const [paymentMethod, setPaymentMethod] = useState('cod');
@@ -46,6 +48,8 @@ const CheckoutPage: React.FC = () => {
   const [discountApplied, setDiscountApplied] = useState(false);
 
   const navigate = useNavigate();
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadCart = async () => {
@@ -56,17 +60,38 @@ const CheckoutPage: React.FC = () => {
         console.error('Failed to load cart items:', error);
       }
     };
+
+    const loadUserData = async () => {
+      if (user) {
+        try {
+          const userProfile = await fetchUserProfile();
+          const u = userProfile.data?.user || userProfile.user || {};
+          setEmail(u.email || '');
+          setShippingInfo((info) => ({
+            ...info,
+            firstName: u.name?.split(' ')[0] || '',
+            lastName: u.name?.split(' ').slice(1).join(' ') || '',
+            phone: u.phoneNumber || '',
+          }));
+        } catch (err) {
+          // Optionally handle error
+        }
+      }
+    };
+
     loadCart();
-  }, []);
+    loadUserData();
+  }, [user]);
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.variant.product.price * item.quantity,
     0
   );
 
-  const shipping = 8;
+  const shipping = 75;
   const discount = discountApplied ? subtotal * 0.1 : 0;
-  const tax = (subtotal - discount) * 0.08;
+  // const tax = (subtotal - discount) * 0.08;
+  const tax =0;
   const total = subtotal + shipping + tax - discount;
 
   const handleApplyDiscount = () => {

@@ -3,17 +3,28 @@ import BestSellerCard from "./BestSellerCard";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-const products = [
-  {
-    id: "977b2a15-ecb6-4f25-b7ef-de0fd181bb00",
-    name: "paladio forza",
-    price: 900.0,
-    image: "/uploads/1744894255850-DSC00411.jpg",
-    category: "Men",
-  },
-];
+
+
+import { useEffect, useState } from "react";
+import { getAllProducts } from "@/api/product";
 
 const BestSellers = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const allProducts = await getAllProducts();
+        setProducts(allProducts.filter((p) => p.isBestSeller));
+      } catch (err) {
+        setProducts([]);
+      }
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
   const [emblaRef] = useEmblaCarousel(
     {
       loop: true,
@@ -42,8 +53,9 @@ const BestSellers = () => {
                   id={product.id}
                   name={product.name}
                   price={product.price}
-                  image={product.image}
-                  category={product.category}
+                  image={product.images?.[0]?.url}
+                  category={product.category?.name || ""}
+                  hoverImage={product.images?.[0]?.url || product.images?.[0]?.url}
                 />
               </div>
             ))}

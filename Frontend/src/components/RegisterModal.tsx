@@ -15,6 +15,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ open, onOpenChange, onReg
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
@@ -25,7 +26,7 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ open, onOpenChange, onReg
     setLoading(true);
     try {
       // Call backend register API
-      const response = await apiRegister(name, email, password);
+      const response = await apiRegister(name, email, password, phoneNumber);
       if (response.status === "success" && response.token) {
         // Use AuthContext login to set user state and token
         await login(email, password);
@@ -56,8 +57,9 @@ const RegisterModal: React.FC<RegisterModalProps> = ({ open, onOpenChange, onReg
           </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input placeholder="Name" value={name} onChange={e => setName(e.target.value)} required />
+          <Input placeholder="Name" type="text" value={name} onChange={e => setName(e.target.value)} required />
           <Input placeholder="Email" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+          <Input placeholder="Phone Number" type="tel" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
           <Input placeholder="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <Button type="submit" className="w-full" disabled={loading}>

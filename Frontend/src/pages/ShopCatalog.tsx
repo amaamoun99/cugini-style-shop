@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
+import ProductCardSkeleton from '@/components/ProductCardSkeleton';
 import CatalogHero from '@/components/CatalogHero';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { getAllProducts } from '@/api/product';
@@ -27,8 +28,9 @@ const ShopCatalog = () => {
   }, []);
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === 'all') return products;
-    return products.filter(product => product.category?.name?.toLowerCase() === activeCategory);
+    const activeProducts = products.filter(product => product.isActive);
+    if (activeCategory === 'all') return activeProducts;
+    return activeProducts.filter(product => product.category?.name?.toLowerCase() === activeCategory);
   }, [activeCategory, products]);
 
   return (
@@ -47,13 +49,16 @@ const ShopCatalog = () => {
 
             <div className="container-custom">
               {loading ? (
-                <p className="text-center">Loading...</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {[...Array(3)].map((_, idx) => (
+                    <ProductCardSkeleton key={idx} />
+                  ))}
+                </div>
               ) : (
                 ['all', 'men', 'women'].map(category => (
                   <TabsContent key={category} value={category} className="mt-0">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {filteredProducts.map(product => (
-                        
                         <ProductCard
                           key={product.id}
                           id={product.id}

@@ -26,10 +26,10 @@ const CartPage = () => {
   const { toast } = useToast();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
 
-  useEffect(() => {
+
     // The cart is already loaded by the CartContext
     // We don't need to fetch it again
-  }, []);
+
 
   const handleQuantityChange = async (id: string, change: number) => {
     const item = cartItems.find((item) => item.id === id);
@@ -162,7 +162,7 @@ const CartPage = () => {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="sm:w-24 sm:h-24 flex-shrink-0">
                           <img
-                            src={`import.meta.env.VITE_BASE_URL${item.variant.product.images[0].url}`}
+                            src={`${import.meta.env.VITE_BASE_URL}${item.variant.product.images[0].url}`}
                             alt={item.variant.product.name}
                             className="w-full h-full object-cover"
                           />

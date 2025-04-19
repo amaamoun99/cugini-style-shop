@@ -23,6 +23,9 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getProductById } from "@/api/product";
 import { useToast } from "@/hooks/use-toast";
 import { useCart } from "@/contexts/CartContext";
+import { addToWishlist, removeFromWishlist } from "@/api/user";
+import RegisterModal from "./RegisterModal";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Variant {
   id: string;
@@ -44,6 +47,7 @@ interface Product {
   images: ProductImage[];
   variants: Variant[];
   categoryId?: string;
+  collection?: string; // <-- Add collection (change type if needed)
   // Add other properties as needed
 }
 
@@ -54,6 +58,8 @@ interface QuickViewModalProps {
 }
 
 const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, productId }) => {
+  const { user } = useAuth();
+  const [registerModalOpen, setRegisterModalOpen] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,6 +67,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
 
   const [quantity, setQuantity] = useState<number>(1);
   const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
+  const [wishlistLoading, setWishlistLoading] = useState<boolean>(false);
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [sizes, setSizes] = useState<string[]>([]);
@@ -156,9 +163,40 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
     }
   };
 
-  const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
+  const toggleWishlist = async () => {
+    if (!product) return;
+    if (!user) {
+      setRegisterModalOpen(true);
+      return;
+    }
+    setWishlistLoading(true);
+    try {
+      if (!isWishlisted) {
+        await addToWishlist(product.id);
+        setIsWishlisted(true);
+        toast({
+          title: "Added to Wishlist",
+          description: `${product.name} has been added to your wishlist.`,
+        });
+      } else {
+        await removeFromWishlist(product.id);
+        setIsWishlisted(false);
+        toast({
+          title: "Removed from Wishlist",
+          description: `${product.name} has been removed from your wishlist.`,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update wishlist. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setWishlistLoading(false);
+    }
   };
+
 
   const handleAddToCart = async () => {
     try {
@@ -267,7 +305,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
       <div className="relative bg-gray-50 h-full min-h-[300px] md:min-h-[400px] flex items-center justify-center">
         {productImages.length > 0 ? (
           <img
-            src={`import.meta.env.VITE_BASE_URL${productImages[selectedImage]}`}
+            src={`${import.meta.env.VITE_BASE_URL}${productImages[selectedImage]}`}
             alt={product.name}
             className="w-full h-full object-cover"
           />
@@ -320,9 +358,9 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
         </DialogHeader>
 
         <div className="mt-2 mb-6">
-          <p className="text-gray-600">
-            {product.description || "No description available"}
-          </p>
+        <p className="text-gray-600">
+          {product.collection ? product.collection : "No collection info"}
+        </p>
         </div>
 
         {/* Decorative Line */}
@@ -433,17 +471,20 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
           <LoadingButton
             onClick={handleAddToCart}
             disabled={!selectedSize || isSelectedSizeOutOfStock || !hasSufficientStock()}
-            className="bg-cugini-dark hover:bg-cugini-golden text-white text-xs uppercase tracking-wider py-6 flex-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-cugini-dark hover:bg-cugini-golden text-white text-xs uppercase tracking-wider py-6 flex-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed relative"
             isLoading={isAddingToCart}
-            loadingText="Adding to Cart..."
+            loadingText={null} // We'll handle the text ourselves
             startIcon={<ShoppingBag className="h-4 w-4" />}
           >
-            Add to Cart
+            {/* Both texts rendered, only one visible, so width is fixed */}
+            <span className={isAddingToCart ? "invisible" : ""}>Add to Cart</span>
+            <span className={isAddingToCart ? "absolute left-0 right-0 w-full flex justify-center" : "invisible absolute"}>Adding to Cart...</span>
           </LoadingButton>
 
           <Button
             onClick={toggleWishlist}
             variant="outline"
+            disabled={wishlistLoading}
             className={cn(
               "text-xs uppercase tracking-wider py-6 border-gray-300",
               isWishlisted ? "bg-cugini-golden/10 border-cugini-golden" : ""
@@ -455,7 +496,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
                 isWishlisted ? "fill-cugini-golden text-cugini-golden" : ""
               )}
             />
-            {isWishlisted ? "Wishlisted" : "Add to Wishlist"}
+            {wishlistLoading ? "Adding..." : isWishlisted ? "Wishlisted" : "Add to Wishlist"}
           </Button>
         </div>
 
@@ -480,34 +521,40 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ open, onOpenChange, pro
   // Render different components based on screen size
   if (isMobile) {
     return (
-      <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent
-          side="bottom"
-          className="h-[90vh] p-0 rounded-t-xl overflow-hidden"
-        >
-          <div className="sticky top-0 z-10 bg-white p-3 border-b flex justify-between items-center">
-            <h2 className="font-serif text-sm uppercase tracking-wider">
-              Quick View
-            </h2>
-            <button
-              onClick={() => onOpenChange(false)}
-              className="rounded-full p-1 hover:bg-gray-100"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-          <div className="overflow-y-auto h-[calc(90vh-48px)]">{content}</div>
-        </SheetContent>
-      </Sheet>
+      <>
+        <Sheet open={open} onOpenChange={onOpenChange}>
+          <SheetContent
+            side="bottom"
+            className="h-[90vh] p-0 rounded-t-xl overflow-hidden"
+          >
+            <div className="sticky top-0 z-10 bg-white p-3 border-b flex justify-between items-center">
+              <h2 className="font-serif text-sm uppercase tracking-wider">
+                Quick View
+              </h2>
+              <button
+                onClick={() => onOpenChange(false)}
+                className="rounded-full p-1 hover:bg-gray-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="overflow-y-auto h-[calc(90vh-48px)]">{content}</div>
+          </SheetContent>
+        </Sheet>
+        <RegisterModal open={registerModalOpen} onOpenChange={setRegisterModalOpen} />
+      </>
     );
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-white">
-        {content}
-      </DialogContent>
-    </Dialog>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-3xl p-0 overflow-hidden bg-white">
+          {content}
+        </DialogContent>
+      </Dialog>
+      <RegisterModal open={registerModalOpen} onOpenChange={setRegisterModalOpen} />
+    </>
   );
 };
 

@@ -47,7 +47,7 @@ const FeaturedCollections = () => {
           </div>
           
           <p className="text-lg font-serif text-cugini-dark/80 italic tracking-wide max-w-2xl mx-auto">
-            Destinations for timeless style Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, beatae! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius, quasi.
+          Embrace the essence of Italian tradition with our handpicked collection of timeless styles, crafted for those who appreciate true elegance.
           </p>
         </div>
         

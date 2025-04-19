@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 class ProductService {
   // Create a product with all related data
   async createProduct(productData) {
-    const { name, description, price, collection, category, variants, images } =
+    const { name, description, price, collection, category, variants, images, isBestSeller = false, isNewArrival = false } =
       productData;
 
     return await prisma.$transaction(async (tx) => {
@@ -28,6 +28,8 @@ class ProductService {
           price: parseFloat(price),
           collectionId,
           categoryId,
+          isBestSeller,
+          isNewArrival,
         },
       });
       console.log("New product created:", newProduct.id);
@@ -237,6 +239,48 @@ async _findOrCreateCategory(tx, categoryName) {
     }
   }
 
+  async createProduct(data) {
+    try {
+      return await prisma.$transaction(async (tx) => {
+        // Create main product data
+        const newProduct = await tx.product.create({
+          data: {
+            name: data.name,
+            description: data.description,
+            price: data.price ? parseFloat(data.price) : undefined,
+            categoryId: data.categoryId,
+            collectionId: data.collectionId,
+            isBestSeller: typeof data.isBestSeller === 'boolean' ? data.isBestSeller : undefined,
+            isNewArrival: typeof data.isNewArrival === 'boolean' ? data.isNewArrival : undefined,
+          },
+        });
+
+        // Create variants if provided
+        if (data.variants) {
+          await this._createProductVariants(tx, newProduct.id, data.variants);
+        }
+
+        // Create images if provided
+        if (data.images) {
+          await this._createProductImages(tx, newProduct.id, data.images);
+        }
+
+        // 6. Return the complete product with all relations
+        return await tx.product.findUnique({
+          where: { id: newProduct.id },
+          include: {
+            variants: true,
+            images: true,
+            collection: true,
+            category: true,
+          },
+        });
+      });
+    } catch (error) {
+      throw new Error(`Failed to create product: ${error.message}`);
+    }
+  }
+
   async updateProduct(id, data) {
     try {
       return await prisma.$transaction(async (tx) => {
@@ -249,6 +293,8 @@ async _findOrCreateCategory(tx, categoryName) {
             price: data.price ? parseFloat(data.price) : undefined,
             categoryId: data.categoryId,
             collectionId: data.collectionId,
+            isBestSeller: typeof data.isBestSeller === 'boolean' ? data.isBestSeller : undefined,
+            isNewArrival: typeof data.isNewArrival === 'boolean' ? data.isNewArrival : undefined,
           },
         });
 

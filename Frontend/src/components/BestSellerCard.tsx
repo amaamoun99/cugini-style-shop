@@ -13,7 +13,7 @@ interface BestSellerCardProps {
 
 const BestSellerCard = ({ id, name, price, image, category, hoverImage }: BestSellerCardProps) => {
   return (
-    <div className="bg-[#ccb999] p-2">
+    <div className="bg-[#ffffff] p-2">
       <ProductCard
         id={id}
         name={name}
