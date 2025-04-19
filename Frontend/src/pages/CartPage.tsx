@@ -102,7 +102,7 @@ const CartPage = () => {
 
   const subtotal = calculateSubtotal();
   const discount = isPromoApplied ? subtotal * 0.1 : 0;
-  const shipping = subtotal > 300 ? 0 : 25;
+  const shipping = 75;
   const total = subtotal - discount + shipping;
 
   const estimatedDeliveryDate = () => {
